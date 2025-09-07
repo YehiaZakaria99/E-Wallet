@@ -38,7 +38,7 @@ export const CountrySelect = React.memo(function CountrySelect({
         if (!field.value && defaultCountry) {
             field.onChange(defaultCountry);
         }
-    }, []);
+    }, [defaultCountry, field]);
 
     const selectedCountry = useMemo(
         () => COUNTRY_OPTIONS.find((c) => c.code === field.value),
