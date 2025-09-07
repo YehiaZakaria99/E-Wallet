@@ -10,8 +10,8 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { ControllerRenderProps } from "react-hook-form";
-import { signUpInputs } from "@/interfaces/auth/signupInputs.types";
 import ReactCountryFlag from "react-country-flag";
+import { signUpInputs } from "@/interfaces/auth/signupInputs.types";
 
 type CountryOption = { code: string; name: string };
 

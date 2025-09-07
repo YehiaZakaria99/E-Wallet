@@ -14,8 +14,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import { CountrySelect } from '../CountrySelect/CountrySelect';
-import { signUpInputs } from '@/interfaces/auth/signupInputs.types';
 import ShowError from './ShowError';
+import { signUpInputs } from '@/interfaces/auth/signupInputs.types';
 
 
 // Validation
