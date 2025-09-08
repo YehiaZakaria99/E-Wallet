@@ -36,6 +36,7 @@ export default function SignUpForm() {
     const {
         register,
         handleSubmit,
+        reset,
         control,
         formState: { errors },
     } = useForm<signUpInputs>(
@@ -46,7 +47,10 @@ export default function SignUpForm() {
             }
         }
     )
-    const onSubmit: SubmitHandler<signUpInputs> = (data) => console.log(data)
+    const onSubmit: SubmitHandler<signUpInputs> = (data) => {
+        console.log(data);
+        reset();
+    }
 
     return (
         <>
