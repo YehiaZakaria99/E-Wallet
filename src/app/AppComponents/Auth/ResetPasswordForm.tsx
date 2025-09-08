@@ -6,11 +6,12 @@ import { Input } from '@/components/ui/input'
 import { resetPasswordInputs } from '@/interfaces/auth/resetPasswordInputs.types'
 import { Label } from '@radix-ui/react-label'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import ShowError from './ShowError'
+import VerifyCode from './VerifyCode'
 
 
 // Validation
@@ -21,54 +22,71 @@ const schema = yup
     .required()
 
 export default function ResetPasswordForm() {
+    const [emailSent, setEmailSent] = useState<boolean>(false);
 
     // React Hook Form To Handle Inputs
     const {
         register,
+        reset,
         handleSubmit,
         formState: { errors }
     } = useForm<resetPasswordInputs>(
         { resolver: yupResolver(schema), }
     )
-    const onSubmit: SubmitHandler<resetPasswordInputs> = (data) => console.log(data)
+    const onSubmit: SubmitHandler<resetPasswordInputs> =
+        (data) => {
+            console.log(data)
+            setEmailSent(true);
+            reset()
+        }
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <CardContent>
-                    <div className="flex flex-col gap-6">
-                        <div className="grid gap-2">
-                            <Label className="text-stone-900" htmlFor="email">
-                                Email
-                            </Label>
-                            <Input
-                                {...register("email")}
-                                id="email"
-                                type="email"
-                                placeholder="m@example.com"
-                            />
-                            <ShowError error={errors.email} />
-                        </div>
-                    </div>
-                </CardContent>
-                <CardFooter className="flex-col gap-2 py-4">
-                    <Button
-                        type="submit"
-                        className="w-full cursor-pointer bg-stone-900 transition-all duration-300 hover:bg-stone-700"
-                    >
-                        Reset
-                    </Button>
+            {/* Reset Password */}
 
-                    <CardAction className="pt-4 ">
-                        <Link
-                            className="text-blue-950 underline-offset-4 transition-all duration-300 hover:underline"
-                            href={"/login"}
+            {
+                !emailSent &&
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    <CardContent>
+                        <div className="flex flex-col gap-6">
+                            <div className="grid gap-2">
+                                <Label className="text-stone-900" htmlFor="email">
+                                    Email
+                                </Label>
+                                <Input
+                                    {...register("email")}
+                                    id="email"
+                                    type="email"
+                                    placeholder="m@example.com"
+                                />
+                                <ShowError error={errors.email} />
+                            </div>
+                        </div>
+                    </CardContent>
+                    <CardFooter className="flex-col gap-2 pt-4 ">
+                        <Button
+                            type="submit"
+                            className="w-full cursor-pointer  bg-stone-900 transition-all duration-300 hover:bg-stone-700"
                         >
-                            Return to Login
-                        </Link>
-                    </CardAction>
-                </CardFooter>
-            </form>
+                            Reset
+                        </Button>
+                    </CardFooter>
+                </form>
+            }
+
+            {/* Verify Code */}
+            {
+                emailSent && <VerifyCode setEmailSent={setEmailSent} />
+            }
+
+            <CardAction className="py-3 px-4">
+                <Link
+                    className="text-blue-950 underline-offset-4 transition-all duration-300 hover:underline"
+                    href={"/login"}
+                >
+                    Return to Login
+                </Link>
+            </CardAction>
         </>
     )
 }
