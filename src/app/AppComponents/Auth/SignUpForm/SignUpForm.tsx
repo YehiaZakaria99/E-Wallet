@@ -18,12 +18,12 @@ import SignUpHeader from './SignUpHeader'
 // setp 1 validation 
 const stepOneSchema = yup
     .object({
-        fullName: yup.string().required("Full Name is required"),
         email: yup.string().required("Email is required"),
-        password: yup.string().required("Password is required"),
-        rePassword: yup.string().required("RePassword is required").oneOf([yup.ref("password")], "Password must match"),
-        phoneNumber: yup.string().required("Phone is required"),
+        password_hash: yup.string().required("Password is required"),
+        fullname: yup.string().required("Full Name is required"),
+        phone: yup.string().required("Phone is required"),
         country: yup.string().required("Country is required"),
+        // rePassword: yup.string().required("RePassword is required").oneOf([yup.ref("password")], "Password must match"),
     })
 
 
@@ -46,7 +46,7 @@ const stepThreeSchema = yup.object({
 
 export default function SignUpForm() {
 
-    
+
 
     // Redux
     const { step } = useAppSelector((state) => state.signUpReducer);
