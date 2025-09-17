@@ -62,6 +62,9 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
                 icon: "",
                 sound: true,
             });
+
+            console.log(finalResp.message);
+
             return true;
         } catch (error) {
             showToast.error("Failed to sign up", {
@@ -82,6 +85,9 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
             dispatch(setUserInfo(data));
             dispatch(setStep(2));
             reset();
+        }
+        else {
+            console.log("error");
         }
     };
 
