@@ -63,7 +63,7 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
                 sound: true,
             });
             return true;
-        } catch (error: any) {
+        } catch (error) {
             showToast.error("Failed to sign up", {
                 duration: 10000,
                 progress: true,
