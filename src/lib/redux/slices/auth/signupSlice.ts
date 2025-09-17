@@ -8,24 +8,24 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface initialStateType {
   step: number;
-  fullName: string;
   email: string;
-  password: string;
-  rePassword: string;
-  phoneNumber: string;
+  password_hash: string;
+  fullname: string;
+  phone: string;
   country: string;
+  // repassword_hash: string;
   code: string;
   idCard: File | null;
 }
 
 const initialState: initialStateType = {
   step: 1,
-  fullName: "",
   email: "",
-  password: "",
-  rePassword: "",
-  phoneNumber: "",
+  password_hash: "",
+  fullname: "",
+  phone: "",
   country: "",
+  // repassword_hash: "",
   code: "",
   idCard: null,
 };
@@ -38,12 +38,12 @@ const signUpSlice = createSlice({
       state.step = action.payload;
     },
     setUserInfo: (state, action: PayloadAction<signUpInputs>) => {
-      state.fullName = action.payload.fullName;
       state.email = action.payload.email;
-      state.password = action.payload.password;
-      state.rePassword = action.payload.rePassword;
-      state.phoneNumber = action.payload.phoneNumber;
+      state.password_hash = action.payload.password_hash;
+      state.fullname = action.payload.fullname;
+      state.phone = action.payload.phone;
       state.country = action.payload.country;
+      // state.rePassword = action.payload.rePassword;
     },
     setCode: (state, action: PayloadAction<codeInput>) => {
       state.code = action.payload.code;

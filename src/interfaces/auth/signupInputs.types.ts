@@ -1,10 +1,10 @@
 export type signUpInputs = {
-  fullName: string;
   email: string;
-  password: string;
-  rePassword: string;
-  phoneNumber: string;
+  password_hash: string;
+  fullname: string;
+  phone: string;
   country: string;
+  // rePassword: string;
 };
 
 export type codeInput = {
