@@ -6,3 +6,11 @@ export type signUpInputs = {
   phoneNumber: string;
   country: string;
 };
+
+export type codeInput = {
+  code: string;
+};
+
+export type idCardInput = {
+    idCard: FileList;
+};
