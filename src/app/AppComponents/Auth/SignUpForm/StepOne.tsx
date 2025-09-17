@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { signUpInputs } from '@/interfaces/auth/signupInputs.types'
 import { AppDispatch } from '@/lib/redux/store'
 import { setStep, setUserInfo } from '@/lib/redux/slices/auth/signupSlice'
+import { showToast } from 'nextjs-toast-notify'
 
 
 type StepOnePropsType = {
@@ -20,12 +21,70 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
 
     const { register, formState: { errors }, control, handleSubmit, reset } = formStepOne;
 
-    const onSubmit: SubmitHandler<signUpInputs> = (data) => {
-        console.log(data);
-        dispatch(setUserInfo(data));
-        dispatch(setStep(2));
-        reset();
+
+    // type UserResponse = {
+    //     message?: string;
+    //     // error?: string;
+    // };
+
+
+    async function sendStepOneData(userData: signUpInputs): Promise<boolean> {
+
+        // http://fintech-alb-1517668020.us-east-1.elb.amazonaws.com
+        try {
+            const res = await fetch(`http://fintech-alb-1517668020.us-east-1.elb.amazonaws.com/auth/register`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData),
+            });
+
+            const finalResp = await res.json();
+
+            if (!res.ok) {
+                finalResp.message?.map((msg: string) => {
+                    showToast.error(msg, {
+                        duration: 10000,
+                        progress: true,
+                        position: "top-center",
+                        transition: "topBounce",
+                        icon: "",
+                        sound: true,
+                    });
+                });
+                return false;
+            }
+
+            showToast.success(finalResp.message, {
+                duration: 4000,
+                progress: true,
+                position: "top-center",
+                transition: "topBounce",
+                icon: "",
+                sound: true,
+            });
+            return true;
+        } catch (error: any) {
+            showToast.error("Failed to sign up", {
+                duration: 4000,
+                progress: true,
+                position: "top-center",
+                transition: "topBounce",
+                icon: "",
+                sound: true,
+            });
+            return false;
+        }
     }
+
+    const onSubmit: SubmitHandler<signUpInputs> = async (data) => {
+        const success = await sendStepOneData(data);
+        if (success) {
+            dispatch(setUserInfo(data));
+            dispatch(setStep(2));
+            reset();
+        }
+    };
+
 
 
     return (
@@ -38,13 +97,13 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
                                 Full Name
                             </Label>
                             <Input
-                                {...register('fullName')}
+                                {...register('fullname')}
                                 id="fullName"
                                 type="text"
                                 placeholder="your name"
 
                             />
-                            <ShowError error={errors.fullName} />
+                            <ShowError error={errors.fullname} />
                         </div>
                         <div className="grid gap-2">
                             <Label className="text-stone-900" htmlFor="email">
@@ -63,13 +122,13 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
                                 Password
                             </Label>
                             <Input
-                                {...register('password')}
+                                {...register('password_hash')}
                                 id="password"
                                 type="password"
                             />
-                            <ShowError error={errors.password} />
+                            <ShowError error={errors.password_hash} />
                         </div>
-                        <div className="grid gap-2">
+                        {/* <div className="grid gap-2">
                             <Label className="text-stone-900" htmlFor="rePassword">
                                 RePassword
                             </Label>
@@ -79,18 +138,18 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
                                 type="password"
                             />
                             <ShowError error={errors.rePassword} />
-                        </div>
+                        </div> */}
                         <div className="grid gap-2">
                             <Label className="text-stone-900" htmlFor="phone">
                                 Phone Number
                             </Label>
                             <Input
-                                {...register('phoneNumber')}
+                                {...register('phone')}
                                 id="phone"
                                 placeholder="phone"
                                 type="tel"
                             />
-                            <ShowError error={errors.phoneNumber} />
+                            <ShowError error={errors.phone} />
                         </div>
                         <div className="grid gap-2">
                             <Label className="text-stone-900" htmlFor="phone">
