@@ -16,7 +16,7 @@ import { useAppSelector } from '@/lib/redux/hooks'
 
 
 type StepThreePropsType = {
-    formStepThree: UseFormReturn<idCardInput, any, idCardInput>;
+    formStepThree: UseFormReturn<idCardInput, idCardInput>;
     dispatch: AppDispatch;
 }
 export default function StepThree({ formStepThree, dispatch }: StepThreePropsType) {

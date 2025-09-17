@@ -13,7 +13,7 @@ import { setCode, setStep, setUserInfo } from '@/lib/redux/slices/auth/signupSli
 
 
 type StepTwoPropsType = {
-    formStepTwo: UseFormReturn<codeInput, any, codeInput>;
+    formStepTwo: UseFormReturn<codeInput, codeInput>;
     dispatch: AppDispatch;
 }
 export default function StepTwo({ formStepTwo, dispatch }: StepTwoPropsType) {

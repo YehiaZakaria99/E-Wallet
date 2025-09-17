@@ -13,7 +13,7 @@ import { setStep, setUserInfo } from '@/lib/redux/slices/auth/signupSlice'
 
 
 type StepOnePropsType = {
-    formStepOne: UseFormReturn<signUpInputs, any, signUpInputs>;
+    formStepOne: UseFormReturn<signUpInputs, signUpInputs>;
     dispatch: AppDispatch;
 }
 export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
