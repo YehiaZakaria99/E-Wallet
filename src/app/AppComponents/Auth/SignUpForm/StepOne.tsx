@@ -55,7 +55,7 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
             }
 
             showToast.success(finalResp.message, {
-                duration: 4000,
+                duration: 10000,
                 progress: true,
                 position: "top-center",
                 transition: "topBounce",
@@ -65,7 +65,7 @@ export default function StepOne({ formStepOne, dispatch }: StepOnePropsType) {
             return true;
         } catch (error: any) {
             showToast.error("Failed to sign up", {
-                duration: 4000,
+                duration: 10000,
                 progress: true,
                 position: "top-center",
                 transition: "topBounce",
