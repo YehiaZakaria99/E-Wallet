@@ -10,7 +10,7 @@ export default function HeroSection() {
                         Managing Your Personal Finances Made Easier
                     </h1>
                     <p className="mt-6 sm:mt-8 text-sm sm:text-base md:text-lg font-light text-white">
-                        Elevate your financial experience with CashEase. We simplify how you pay,
+                        Elevate your financial experience with E-Wallet. We simplify how you pay,
                         transfer money, and manage your finances, giving you full control over your money.
                     </p>
                 </div>
@@ -21,7 +21,6 @@ export default function HeroSection() {
                     </Link>
                     <Link href="#chooseUs" className="text-sm/6 font-semibold text-white hover:text-gray-100">
                         Learn more
-                        {/* <span aria-hidden="true">→</span> */}
                     </Link>
                 </div>
 
@@ -43,9 +42,6 @@ export default function HeroSection() {
                 </div>
 
             </div>
-            {/* <div className="mt-8 sm:mt-10 absolute bottom-32 left-1/2 transform -translate-x-1/2 z-[9999]">
-                <ScrollDown to="#" />
-            </div> */}
             <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-[0]">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 200">
                     <path fill="#fff" fill-opacity="1" d="M0,128L80,138.7C160,149,320,171,480,160C640,149,800,107,960,85.3C1120,64,1280,64,1360,64L1440,64L1440,320L1360,320C1280,320,1120,320,960,320C800,320,640,320,480,320C320,320,160,320,80,320L0,320Z"></path>

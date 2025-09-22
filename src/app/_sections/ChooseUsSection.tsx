@@ -5,7 +5,7 @@ const chooseUsData = [
     {
         icon: <SafetyOutlined className='text-3xl' />,
         title: "Fast And Secure Transactions.",
-        desc: "Enjoy secure and instant payments anywhere, anytime. CashEase gives you peace of mind."
+        desc: "Enjoy secure and instant payments anywhere, anytime. E-Wallet gives you peace of mind."
     },
     {
         icon: <PercentageOutlined className='text-3xl' />,
