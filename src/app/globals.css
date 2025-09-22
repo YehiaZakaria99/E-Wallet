@@ -41,6 +41,9 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
+  --color-mainColor: var(--main-color);
+  --color-secColor: var(--sec-color);
+  --color-descColor: var(--desc-color);
 }
 
 :root {
@@ -76,6 +79,9 @@
   --sidebar-accent-foreground: oklch(0.216 0.006 56.043);
   --sidebar-border: oklch(0.923 0.003 48.717);
   --sidebar-ring: oklch(0.709 0.01 56.259);
+  --main-color: #662ab2;
+  --sec-color: #f6f2fd;
+  --desc-color: #706183;
 }
 
 .dark {
@@ -121,5 +127,10 @@
   }
 }
 .active {
-  @apply text-blue-900;
+  @apply text-white underline underline-offset-4;
+}
+
+html,
+body {
+  scroll-behavior: smooth;
 }
