@@ -78,7 +78,7 @@ export default function SignInForm() {
                 <CardFooter className="flex-col gap-2 py-4">
                     <Button
                         type="submit"
-                        className="w-full cursor-pointer bg-stone-900 transition-all duration-300 hover:bg-stone-700"
+                        className="w-full cursor-pointer bg-blue-950 transition-all duration-300 hover:bg-blue-900"
                     >
                         Login
                     </Button>
