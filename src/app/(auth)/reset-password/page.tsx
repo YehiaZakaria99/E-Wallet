@@ -1,4 +1,4 @@
-import ResetPasswordForm from '@/app/AppComponents/Auth/ResetPasswordForm'
+import ResetPasswordForm from '@/app/_AppComponents/Auth/ResetPasswordForm'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import React from 'react'
 
