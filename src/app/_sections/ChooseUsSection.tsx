@@ -29,7 +29,6 @@ export default function ChooseUsSection() {
                             Simple, Swift, and Secure,
                         </p>
                         <p>Why You Should Choose Us</p>
-
                     </h2>
 
                     {/* cards grid */}
