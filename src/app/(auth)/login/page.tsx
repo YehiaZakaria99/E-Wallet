@@ -5,8 +5,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import SignInForm from "@/app/_AppComponents/Auth/SignInForm";
+import { redirect } from "next/navigation";
+import { loggedUser } from "@/app/_AppComponents/Guard/loggedUser";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+
+  const isLoggedUser = await loggedUser();
+  if (isLoggedUser) {
+    redirect("/dashboard");
+  }
   return (
     <>
       <section className="py-36 px-5">

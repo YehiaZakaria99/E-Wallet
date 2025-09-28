@@ -8,9 +8,17 @@ import {
 } from "@/components/ui/card";
 import SignUpForm from "@/app/_AppComponents/Auth/SignUpForm/SignUpForm";
 import Link from "next/link";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { loggedUser } from "@/app/_AppComponents/Guard/loggedUser";
 
 
-export default function SignUpPage() {
+export default async function SignUpPage() {
+  const isLoggedUser = await loggedUser();
+  if (isLoggedUser) {
+    redirect("/dashboard");
+  }
+
   return (
     <>
       <section className="py-34 px-5">
@@ -22,7 +30,7 @@ export default function SignUpPage() {
           </CardHeader>
 
           <SignUpForm />
-          
+
           <CardAction className="py-1 mx-auto">
             Have An Account ?{" "}
             <Link
