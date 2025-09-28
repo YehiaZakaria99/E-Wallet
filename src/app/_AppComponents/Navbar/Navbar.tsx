@@ -3,6 +3,9 @@ import Link from 'next/link'
 import React from 'react'
 import NavbarDesktop from './NavbarDesktop'
 import { linksType } from '@/interfaces/links.type'
+import { useAppSelector } from '@/lib/redux/hooks'
+import Logout from '../Auth/Logout'
+import Cookies from "js-cookie";
 
 const links: linksType[] = [
     {
@@ -32,8 +35,11 @@ const auth: linksType[] = [
         name: "Sign Up"
     },
 ]
+
+
 export default function Navbar() {
 
+    const { token } = useAppSelector((state) => state.signInReducer);
     return (
         <>
             <nav className=" border-gray-200 bg-blue-950  py-3 fixed z-[9999] top-0 left-0 w-full ">
@@ -59,9 +65,14 @@ export default function Navbar() {
                         <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 md:flex-row  md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  dark:border-gray-700">
 
                             {
-                                auth.map((link) => (
-                                    <NavbarDesktop key={link.href} link={link} />
-                                ))
+                                (token || Cookies.get("userToken"))
+                                    ?
+                                    <Logout />
+                                    :
+                                    auth.map((link) => (
+                                        <NavbarDesktop key={link.href} link={link} />
+                                    ))
+
                             }
                         </ul>
                     </div>
