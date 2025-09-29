@@ -23,28 +23,29 @@ type CountrySelectProps = {
     placeholder?: string;
     showFlagsInList?: boolean;
     defaultCountry?: string;
-    field: ControllerRenderProps<signUpInputs, "country">;
+    // field: ControllerRenderProps<signUpInputs, "country">;
 };
 
 export const CountrySelect = React.memo(function CountrySelect({
     placeholder = "Select country",
     showFlagsInList = true,
     defaultCountry,
-    field,
+    // field,
 }: CountrySelectProps) {
     const [open, setOpen] = useState(false);
-
-    useEffect(() => {
-        if (!field.value && defaultCountry) {
-            field.onChange(defaultCountry);
-        }
-    }, [defaultCountry, field]);
-
+    /* 
+        useEffect(() => {
+            if (!field.value && defaultCountry) {
+                field.onChange(defaultCountry);
+            }
+        }, [defaultCountry, field]);
+     */
+    /* 
     const selectedCountry = useMemo(
         () => COUNTRY_OPTIONS.find((c) => c.code === field.value),
         [field.value]
     );
-
+ */
     const countryItems = useMemo(
         () =>
             COUNTRY_OPTIONS.map((opt) => (
@@ -67,27 +68,30 @@ export const CountrySelect = React.memo(function CountrySelect({
 
     return (
         <Select
-            value={field.value}
-            onValueChange={field.onChange}
+            // value={field.value}
+            // onValueChange={field.onChange}
             onOpenChange={setOpen}
         >
             <SelectTrigger className="w-full">
                 <div className="flex items-center gap-2">
-                    {selectedCountry ? (
-                        <>
-                            {showFlagsInList && (
+                    {/* {selectedCountry ? ( */}
+                    <>
+                        {/*                             {showFlagsInList && (
                                 <ReactCountryFlag
                                     countryCode={selectedCountry.code.toUpperCase()}
                                     svg
                                     style={{ width: "1rem", height: "1rem", lineHeight: 0 }}
                                     aria-hidden
                                 />
+                                
                             )}
-                            <span className="truncate">{selectedCountry.name}</span>
-                        </>
-                    ) : (
+                             */}
+                        {/* <span className="truncate">{selectedCountry.name}</span> */}
+                    </>
+                    {/*                     ) : (
                         <SelectValue placeholder={placeholder} />
                     )}
+                     */}
                 </div>
             </SelectTrigger>
 
