@@ -134,3 +134,12 @@ html,
 body {
   scroll-behavior: smooth;
 }
+
+
+.disabled-link {
+  pointer-events: none; /* Prevents click events */
+  cursor: default; /* Changes cursor to default arrow */
+  text-decoration: none; /* Removes underline */
+  color: inherit; /* Inherits color from parent */
+  
+}
