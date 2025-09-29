@@ -1,32 +1,29 @@
 import Cookies from "js-cookie";
-
-import { createSlice } from "@reduxjs/toolkit";
-import { redirect } from "next/navigation";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 type initialStateType = {
   token: string | null;
 };
 
-const initialState = {
+const initialState: initialStateType = {
   token: null,
 };
 
-const singinSlice = createSlice({
+const signinSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    setUserToken: (state, action) => {
+    setUserToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
       Cookies.set("userToken", state.token || "");
     },
     logout: (state) => {
       state.token = null;
       Cookies.remove("userToken");
-      redirect("/login");
     },
   },
 });
 
-export default singinSlice.reducer;
+export default signinSlice.reducer;
 
-export const { setUserToken, logout } = singinSlice.actions;
+export const { setUserToken, logout } = signinSlice.actions;
