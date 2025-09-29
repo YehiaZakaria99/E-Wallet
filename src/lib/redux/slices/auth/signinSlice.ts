@@ -4,9 +4,6 @@ import { createSlice } from "@reduxjs/toolkit";
 import { redirect } from "next/navigation";
 
 type initialStateType = {
-  //   user: "string" | null;
-  //   loading: boolean;
-  //   error: string | null;
   token: string | null;
 };
 
@@ -25,7 +22,7 @@ const singinSlice = createSlice({
     logout: (state) => {
       state.token = null;
       Cookies.remove("userToken");
-      redirect("/home");
+      redirect("/login");
     },
   },
 });
