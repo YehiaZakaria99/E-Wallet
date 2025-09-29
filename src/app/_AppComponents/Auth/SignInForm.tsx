@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { signInInputs } from "@/interfaces/auth/signInInputs.types";
 import { Label } from "@radix-ui/react-label";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -16,6 +16,7 @@ import { useAppDispatch } from "@/lib/redux/hooks";
 import { setUserToken } from "@/lib/redux/slices/auth/signinSlice";
 import { useRouter } from "next/navigation";
 import { baseUrl } from "@/server/config";
+import { useMutation } from "@tanstack/react-query";
 
 // Validation Schema
 const schema = yup.object({
@@ -35,10 +36,29 @@ type successFinalRespType = {
     refreshToken: string;
 };
 
-export default function SignInForm() {
-    const [apiError, setApiError] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
+// API Function
+async function login(userData: signInInputs) {
+    const res = await fetch(`${baseUrl}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData),
+    });
 
+    const finalResp = await res.json();
+
+    if (!res.ok) {
+        const { error, message, statusCode }: errFinalRespType = finalResp;
+        throw new Error(
+            statusCode === 403 && error === "Forbidden"
+                ? message
+                : "Invalid Email or Password"
+        );
+    }
+
+    return finalResp as successFinalRespType;
+}
+
+export default function SignInForm() {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
@@ -49,57 +69,38 @@ export default function SignInForm() {
         formState: { errors },
     } = useForm<signInInputs>({ resolver: yupResolver(schema) });
 
-    async function login(userData: signInInputs) {
-        try {
-            setIsLoading(true);
-            const res = await fetch(`${baseUrl}/auth/login`, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(userData),
+    // Mutation
+    const loginMutation = useMutation({
+        mutationFn: login,
+        onSuccess: (data) => {
+            const { accessToken } = data;
+            dispatch(setUserToken(accessToken));
+            reset();
+            router.push("/dashboard");
+        },
+        onError: (error: unknown) => {
+            const message =
+                error instanceof Error ? error.message : "Something went wrong";
+            showToast.error(message, {
+                duration: 5000,
+                position: "top-center",
             });
+        },
+    });
 
-            const finalResp = await res.json();
-
-            if (!res.ok) {
-                const { error, message, statusCode }: errFinalRespType = finalResp;
-                setApiError(
-                    statusCode === 403 && error === "Forbidden" ? message : ""
-                );
-                if (!(statusCode === 403 && error === "Forbidden")) {
-                    showToast.error("Invalid Email or Password", {
-                        duration: 5000,
-                        position: "top-center",
-                    });
-                }
-                return null;
-            }
-
-            setApiError("");
-            return finalResp as successFinalRespType;
-        } catch (err) {
-            console.error("catch err", err);
-            showToast.error("Something went wrong, try again later.");
-            return null;
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
-    const onSubmit: SubmitHandler<signInInputs> = async (data) => {
-        const loginResp = await login(data);
-        if (!loginResp) return;
-
-        const { accessToken } = loginResp;
-        dispatch(setUserToken(accessToken));
-        reset();
-        router.push("/dashboard"); // redirect after login
+    const onSubmit: SubmitHandler<signInInputs> = (data) => {
+        loginMutation.mutate(data);
     };
 
     return (
         <>
-            {apiError && (
+            {loginMutation.isError && (
                 <div className="text-center">
-                    <p className="text-red-500">{apiError}</p>
+                    <p className="text-red-500">
+                        {loginMutation.error instanceof Error
+                            ? loginMutation.error.message
+                            : ""}
+                    </p>
                     <Link
                         href="/email-verify"
                         className="text-blue-950 hover:underline hover:underline-offset-4 transition-all duration-300"
@@ -149,9 +150,9 @@ export default function SignInForm() {
                     <Button
                         type="submit"
                         className="w-full cursor-pointer bg-blue-950 transition-all duration-300 hover:bg-blue-900"
-                        disabled={isLoading}
+                        disabled={loginMutation.isPending}
                     >
-                        {isLoading ? "Logging in..." : "Login"}
+                        {loginMutation.isPending ? "Logging in..." : "Login"}
                     </Button>
 
                     <div className="py-4 mx-auto">
