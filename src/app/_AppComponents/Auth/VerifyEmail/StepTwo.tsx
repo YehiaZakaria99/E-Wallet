@@ -17,9 +17,6 @@ import { codeInput } from '@/interfaces/auth/verifyEmailInput.types'
 import { useRouter } from 'next/navigation'
 
 
-// type codeBodyType = {
-//     code: string
-// }
 
 type StepTwoPropsType = {
     formStepTwo: UseFormReturn<codeInput>;
@@ -29,25 +26,6 @@ export default function StepTwo({ formStepTwo, dispatch }: StepTwoPropsType) {
 
     const [loading, setLoading] = useState(false);
     const { register, formState: { errors }, handleSubmit, reset } = formStepTwo;
-
-    // /auth/verify-email
-    // async function handleErrorResponse(res: Response, finalResp: any): Promise<boolean> {
-    //     if (!res.ok) {
-    //         if (Array.isArray(finalResp.message)) {
-    //             finalResp.message.forEach((msg: string) =>
-    //                 showToast.error(msg, { duration: 5000, position: "top-center" })
-    //             )
-    //         } else {
-    //             showToast.error(finalResp.message || "Something went wrong", {
-    //                 duration: 5000,
-    //                 position: "top-center",
-    //             })
-    //         }
-    //         return false
-    //     }
-    //     return true
-    // }
-
 
 
     async function sendCode(code: codeInput) {
