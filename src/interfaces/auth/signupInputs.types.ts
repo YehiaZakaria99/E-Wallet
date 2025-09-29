@@ -3,14 +3,14 @@ export type signUpInputs = {
   password_hash: string;
   fullname: string;
   phone: string;
-  country: string;
+  // country: string;
   // rePassword: string;
 };
 
-export type codeInput = {
-  code: string;
-};
+// export type codeInput = {
+//   code: string;
+// };
 
-export type idCardInput = {
-    idCard: FileList;
-};
+// export type idCardInput = {
+//     idCard: FileList;
+// };
