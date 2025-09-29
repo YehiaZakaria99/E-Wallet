@@ -1,4 +1,4 @@
-
+"use client"
 import Link from 'next/link'
 import React from 'react'
 import NavbarDesktop from './NavbarDesktop'
@@ -20,10 +20,10 @@ const links: linksType[] = [
         href: "/transactions",
         name: "Transactions"
     },
-    {
-        href: "/verification",
-        name: "Verification"
-    },
+    // {
+    //     href: "/verification",
+    //     name: "Verification"
+    // },
 ]
 const auth: linksType[] = [
     {
@@ -40,6 +40,16 @@ const auth: linksType[] = [
 export default function Navbar() {
 
     const { token } = useAppSelector((state) => state.signInReducer);
+
+    const [isClient, setIsClient] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    const loggedIn = isClient && (token || Cookies.get("userToken"));
+
+
     return (
         <>
             <nav className=" border-gray-200 bg-blue-950  py-3 fixed z-[9999] top-0 left-0 w-full ">
@@ -63,17 +73,11 @@ export default function Navbar() {
                         </ul>
                         {/* Auth */}
                         <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 md:flex-row  md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  dark:border-gray-700">
-
-                            {
-                                (token || Cookies.get("userToken"))
-                                    ?
-                                    <Logout />
-                                    :
-                                    auth.map((link) => (
-                                        <NavbarDesktop key={link.href} link={link} />
-                                    ))
-
-                            }
+                            {loggedIn ? (
+                                <Logout />
+                            ) : (
+                                auth.map((link) => <NavbarDesktop key={link.href} link={link} />)
+                            )}
                         </ul>
                     </div>
 
