@@ -25,7 +25,13 @@ async function verifyPhone(body: phoneInputType) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
     });
-    const finalResp = await res.json();
+    let finalResp: any;
+
+    try {
+        finalResp = await res.json();
+    } catch {
+        throw new Error("Verification failed");
+    }
 
     if (!res.ok) {
         throw new Error(

@@ -26,7 +26,13 @@ async function verifyEmail(body: { code?: string; token?: string }) {
         body: JSON.stringify(body),
     });
 
-    const finalResp = await res.json();
+    let finalResp: any;
+
+    try {
+        finalResp = await res.json();
+    } catch {
+        throw new Error("Verification failed");
+    }
 
     if (!res.ok) {
         throw new Error(

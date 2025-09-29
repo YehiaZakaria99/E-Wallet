@@ -49,10 +49,16 @@ async function login(userData: signInInputs) {
         body: JSON.stringify(userData),
     });
 
-    const finalResp = await res.json();
+    let finalResp: any;
+
+    try {
+        finalResp = await res.json();
+    } catch {
+        throw new Error("Login failed");
+    }
 
     if (!res.ok) {
-        const { error, message, statusCode }: errFinalRespType = finalResp;
+        const { error, message, statusCode }: errFinalRespType = finalResp || {};
         throw new Error(
             statusCode === 403 && error === "Forbidden"
                 ? message
@@ -62,6 +68,7 @@ async function login(userData: signInInputs) {
 
     return finalResp as successFinalRespType;
 }
+
 
 export default function SignInForm() {
     const dispatch = useAppDispatch();

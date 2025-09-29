@@ -36,7 +36,13 @@ async function registerData(userData: signUpInputs) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
     });
-    const finalResp = await res.json();
+    let finalResp: any;
+
+    try {
+        finalResp = await res.json();
+    } catch {
+        throw new Error("Register failed");
+    }
 
     if (!res.ok) {
         throw new Error(
@@ -54,7 +60,13 @@ async function verifyEmail(email: { email: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(email),
     });
-    const finalResp = await res.json();
+    let finalResp: any;
+
+    try {
+        finalResp = await res.json();
+    } catch {
+        throw new Error("Verification failed");
+    }
 
     if (!res.ok) {
         throw new Error(
