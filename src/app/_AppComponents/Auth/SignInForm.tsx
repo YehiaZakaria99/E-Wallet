@@ -59,12 +59,15 @@ async function login(userData: signInInputs) {
 
     if (!res.ok) {
         const { error, message, statusCode }: errFinalRespType = finalResp || {};
-        throw new Error(
-            statusCode === 403 && error === "Forbidden"
-                ? message
-                : "Invalid Email or Password"
-        );
+        if (statusCode === 403 && error === "Forbidden") {
+            throw new Error("User not verified");
+        }
+        if (statusCode === 401) {
+            throw new Error("Invalid Email or Password");
+        }
+        throw new Error(message || "Login failed");
     }
+
 
     return finalResp as successFinalRespType;
 }
@@ -115,16 +118,17 @@ export default function SignInForm() {
                             : ""}
                     </p>
 
-                    {loginMutation.error instanceof Error
-                        ? loginMutation.error.message !== "Invalid Email or Password" &&
-                        <Link
-                            href="/email-verify"
-                            className="text-blue-950 hover:underline hover:underline-offset-4 transition-all duration-300"
-                        >
-                            Verify here
-                        </Link>
-                        : ""
-                    }
+                    {loginMutation.isError && loginMutation.error instanceof Error &&
+                        loginMutation.error.message === "User not verified" && (
+                            <div className="text-center mt-2">
+                                <Link
+                                    href="/email-verify"
+                                    className="text-blue-950 hover:underline hover:underline-offset-4 transition-all duration-300"
+                                >
+                                    Verify here
+                                </Link>
+                            </div>
+                        )}
                 </div>
             )}
 
