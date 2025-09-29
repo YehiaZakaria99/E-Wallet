@@ -7,53 +7,58 @@ import { Control, Controller, FieldErrors, FieldValues, SubmitHandler, UseFormRe
 import { CountrySelect } from '../../CountrySelect/CountrySelect'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { codeInput, idCardInput, signUpInputs } from '@/interfaces/auth/signupInputs.types'
+// import { codeInput, idCardInput, signUpInputs } from '@/interfaces/auth/signupInputs.types'
 import { AppDispatch } from '@/lib/redux/store'
-import { resetSignUp, setCode, setIdCard, setStep, setUserInfo } from '@/lib/redux/slices/auth/signupSlice'
+// import { resetSignUp, setCode, setIdCard, setStep, setUserInfo } from '@/lib/redux/slices/auth/signupSlice'
 import { useRouter } from 'next/navigation'
-import FileUpload from './FileUpload'
+// import FileUpload from './FileUpload'
 import { useAppSelector } from '@/lib/redux/hooks'
 
-
+/* 
 type StepThreePropsType = {
     formStepThree: UseFormReturn<idCardInput, idCardInput>;
     dispatch: AppDispatch;
 }
-export default function StepThree({ formStepThree, dispatch }: StepThreePropsType) {
+    { formStepThree, dispatch }: StepThreePropsType
+ */
+export default function StepThree() {
 
-    const { idCard } = useAppSelector((state) => state.signUpReducer);
+    // const { idCard } = useAppSelector((state) => state.signUpReducer);
 
     const router = useRouter()
 
-    const { register, formState: { errors }, handleSubmit, reset } = formStepThree;
+    // const { register, formState: { errors }, handleSubmit, reset } = formStepThree;
 
-    const onSubmit: SubmitHandler<idCardInput> = (data) => {
+    // const onSubmit: SubmitHandler<idCardInput> = (data) => {
 
-        const files = data.idCard;
-        if (files) {
-            Array.from(files).map((file) => {
-                console.log(file);
-                dispatch(setIdCard(file));
-            })
-            router.push("/");
-        }
-        
-        
-    };
-    
+    /* const files = data.idCard;
+    if (files) {
+        Array.from(files).map((file) => {
+            console.log(file);
+            dispatch(setIdCard(file));
+        })
+        router.push("/");
+    }
+     */
+
+    // };
+    /* 
     useEffect(()=>{
         console.log("idCard from Slice : ", idCard);
     },[idCard])
+ */
 
-
-
+    /* 
+    
+    onSubmit={handleSubmit(onSubmit)}
+    */
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form >
                 <CardContent>
                     <div className="flex flex-col gap-6">
                     </div>
-                    <FileUpload register={register} errors={errors} />
+                    {/* <FileUpload register={register} errors={errors} /> */}
                 </CardContent>
 
                 <CardFooter className="flex-col gap-2 py-4">
@@ -68,4 +73,5 @@ export default function StepThree({ formStepThree, dispatch }: StepThreePropsTyp
 
         </>
     )
+
 }
