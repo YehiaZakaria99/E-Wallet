@@ -20,8 +20,13 @@ import { useMutation } from "@tanstack/react-query";
 
 // Validation Schema
 const schema = yup.object({
-    email: yup.string().required("Email is required"),
-    password: yup.string().required("Password is required"),
+    email: yup
+        .string()
+        .email("Invalid email format")
+        .required("Email is required"),
+    password: yup
+        .string()
+        .required("Password is required"),
 });
 
 type errFinalRespType = {
@@ -76,9 +81,10 @@ export default function SignInForm() {
             const { accessToken } = data;
             dispatch(setUserToken(accessToken));
             reset();
-            router.push("/dashboard");
+            router.replace("/dashboard");
         },
         onError: (error: unknown) => {
+            console.log(error);
             const message =
                 error instanceof Error ? error.message : "Something went wrong";
             showToast.error(message, {
@@ -101,12 +107,17 @@ export default function SignInForm() {
                             ? loginMutation.error.message
                             : ""}
                     </p>
-                    <Link
-                        href="/email-verify"
-                        className="text-blue-950 hover:underline hover:underline-offset-4 transition-all duration-300"
-                    >
-                        Verify here
-                    </Link>
+
+                    {loginMutation.error instanceof Error
+                        ? loginMutation.error.message !== "Invalid Email or Password" &&
+                        <Link
+                            href="/email-verify"
+                            className="text-blue-950 hover:underline hover:underline-offset-4 transition-all duration-300"
+                        >
+                            Verify here
+                        </Link>
+                        : ""
+                    }
                 </div>
             )}
 
