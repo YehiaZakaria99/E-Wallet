@@ -49,7 +49,7 @@ async function login(userData: signInInputs) {
         body: JSON.stringify(userData),
     });
 
-    let finalResp: any;
+    let finalResp;
 
     try {
         finalResp = await res.json();

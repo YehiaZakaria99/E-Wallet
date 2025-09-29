@@ -25,7 +25,7 @@ async function verifyPhone(body: phoneInputType) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
     });
-    let finalResp: any;
+    let finalResp;
 
     try {
         finalResp = await res.json();

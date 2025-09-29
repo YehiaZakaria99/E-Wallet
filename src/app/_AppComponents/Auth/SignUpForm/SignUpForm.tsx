@@ -36,7 +36,7 @@ async function registerData(userData: signUpInputs) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(userData),
     });
-    let finalResp: any;
+    let finalResp;
 
     try {
         finalResp = await res.json();
@@ -60,7 +60,7 @@ async function verifyEmail(email: { email: string }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(email),
     });
-    let finalResp: any;
+    let finalResp;
 
     try {
         finalResp = await res.json();

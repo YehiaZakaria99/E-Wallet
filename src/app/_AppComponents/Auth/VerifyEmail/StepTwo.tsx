@@ -26,7 +26,7 @@ async function verifyEmail(body: { code?: string; token?: string }) {
         body: JSON.stringify(body),
     });
 
-    let finalResp: any;
+    let finalResp;
 
     try {
         finalResp = await res.json();
