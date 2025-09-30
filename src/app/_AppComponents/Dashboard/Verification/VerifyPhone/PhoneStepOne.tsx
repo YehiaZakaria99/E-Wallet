@@ -4,7 +4,7 @@ import { CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { phoneInputType } from '@/interfaces/verification/verifications.types'
 import { useAppDispatch } from '@/lib/redux/hooks'
-import { setPhoneStep } from '@/lib/redux/slices/verification/verificationSlice'
+import { setPhone, setPhoneStep } from '@/lib/redux/slices/verification/verificationSlice'
 import { baseUrl } from '@/server/config'
 import { Label } from '@radix-ui/react-label'
 import { useMutation } from '@tanstack/react-query'
@@ -12,21 +12,19 @@ import { showToast } from 'nextjs-toast-notify'
 import React from 'react'
 import { SubmitHandler, UseFormReturn } from 'react-hook-form'
 
-
-
 type PhoneStepOnePropsType = {
     phoneForm: UseFormReturn<phoneInputType>
 }
 
-// API 
+// API
 async function verifyPhone(body: phoneInputType) {
     const res = await fetch(`${baseUrl}/auth/phone-verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
     });
-    let finalResp;
 
+    let finalResp;
     try {
         finalResp = await res.json();
     } catch {
@@ -46,7 +44,6 @@ async function verifyPhone(body: phoneInputType) {
 export default function PhoneStepOne({ phoneForm }: PhoneStepOnePropsType) {
     const dispatch = useAppDispatch();
 
-
     const {
         register,
         reset,
@@ -56,11 +53,12 @@ export default function PhoneStepOne({ phoneForm }: PhoneStepOnePropsType) {
 
     const phoneMutation = useMutation({
         mutationFn: verifyPhone,
-        onSuccess: (data) => {
+        onSuccess: (data, variables) => {
             showToast.success(data.message || "Phone Verification Successfully ✅", {
                 duration: 3000,
                 position: "top-center",
             });
+            dispatch(setPhone(variables.phone));
             dispatch(setPhoneStep(2));
             reset();
         },
@@ -76,34 +74,32 @@ export default function PhoneStepOne({ phoneForm }: PhoneStepOnePropsType) {
         }
 
     return (
-        <>
-            <form onSubmit={handleSubmit(onSubmit)}>
-                <CardContent>
-                    <div className="flex flex-col gap-6">
-                        <div className="grid gap-2">
-                            <Label className="text-stone-900" htmlFor="phone">
-                                Phone
-                            </Label>
-                            <Input
-                                {...register("phone")}
-                                id="phone"
-                                type="tel"
-                                placeholder=""
-                            />
-                            <ShowError error={errors.phone} />
-                        </div>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <CardContent>
+                <div className="flex flex-col gap-6">
+                    <div className="grid gap-2">
+                        <Label className="text-stone-900" htmlFor="phone">
+                            Phone
+                        </Label>
+                        <Input
+                            {...register("phone")}
+                            id="phone"
+                            type="tel"
+                            placeholder="Enter your phone number"
+                        />
+                        <ShowError error={errors.phone} />
                     </div>
-                </CardContent>
-                <CardFooter className="flex-col gap-2 pt-4 ">
-                    <Button
-                        type="submit"
-                        className="w-full cursor-pointer  bg-blue-950 transition-all duration-300 hover:bg-blue-900"
-                        disabled={phoneMutation.isPending}
-                    >
-                        {phoneMutation.isPending ? "Verifying..." : "Verify Phone"}
-                    </Button>
-                </CardFooter>
-            </form>
-        </>
+                </div>
+            </CardContent>
+            <CardFooter className="flex-col gap-2 pt-4">
+                <Button
+                    type="submit"
+                    className="w-full cursor-pointer bg-blue-950 transition-all duration-300 hover:bg-blue-900"
+                    disabled={phoneMutation.isPending}
+                >
+                    {phoneMutation.isPending ? "Verifying Phone..." : "Verify Phone"}
+                </Button>
+            </CardFooter>
+        </form>
     )
 }
