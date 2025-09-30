@@ -7,13 +7,13 @@ if (!API_BASE_URL) {
   throw new Error("❌ Missing NEXT_PUBLIC_BASE_URL in environment variables");
 }
 
-type RouteParams = {
+type ProxyContext = {
   params: { path: string[] };
 };
 
 async function handleRequest(
   req: NextRequest,
-  { params }: RouteParams
+  { params }: ProxyContext
 ): Promise<NextResponse> {
   const targetPath = params.path.join("/");
   const targetUrl = `${API_BASE_URL}/${targetPath}`;
@@ -37,15 +37,15 @@ async function handleRequest(
   });
 }
 
-export async function GET(req: NextRequest, ctx: RouteParams) {
-  return handleRequest(req, ctx);
+export async function GET(req: NextRequest, context: ProxyContext) {
+  return handleRequest(req, context);
 }
-export async function POST(req: NextRequest, ctx: RouteParams) {
-  return handleRequest(req, ctx);
+export async function POST(req: NextRequest, context: ProxyContext) {
+  return handleRequest(req, context);
 }
-export async function PUT(req: NextRequest, ctx: RouteParams) {
-  return handleRequest(req, ctx);
+export async function PUT(req: NextRequest, context: ProxyContext) {
+  return handleRequest(req, context);
 }
-export async function DELETE(req: NextRequest, ctx: RouteParams) {
-  return handleRequest(req, ctx);
+export async function DELETE(req: NextRequest, context: ProxyContext) {
+  return handleRequest(req, context);
 }
