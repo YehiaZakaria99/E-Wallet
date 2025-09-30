@@ -17,6 +17,7 @@ import { setUserToken } from "@/lib/redux/slices/auth/signinSlice";
 import { useRouter } from "next/navigation";
 import { baseUrl } from "@/server/config";
 import { useMutation } from "@tanstack/react-query";
+import Cookies from "js-cookie";
 
 // Validation Schema
 const schema = yup.object({
@@ -68,6 +69,7 @@ async function login(userData: signInInputs) {
         throw new Error(message || "Login failed");
     }
 
+    console.log(finalResp);
 
     return finalResp as successFinalRespType;
 }
@@ -88,8 +90,9 @@ export default function SignInForm() {
     const loginMutation = useMutation({
         mutationFn: login,
         onSuccess: (data) => {
-            const { accessToken } = data;
+            const { accessToken, refreshToken } = data;
             dispatch(setUserToken(accessToken));
+            Cookies.set("userToken", refreshToken);
             reset();
             router.replace("/dashboard");
         },
