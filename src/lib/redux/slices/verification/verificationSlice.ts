@@ -5,29 +5,49 @@ type initialStateType = {
   phoneStep: number;
   isIdVerified: boolean;
   idCardStep: number;
+  phone: string;
 };
 
 const initialState: initialStateType = {
   isPhoneVerified: false,
-  phoneStep: 1,
-  isIdVerified: false,
+  phoneStep: 2,
+  isIdVerified:
+    typeof window !== "undefined"
+      ? JSON.parse(localStorage.getItem("isIdVerified") || "false")
+      : false,
   idCardStep: 1,
+  phone: "",
 };
 
 const verificationSlice = createSlice({
   name: "verificationSlice",
   initialState,
   reducers: {
+    // Phone
     setPhoneStep: (state, action) => {
       state.phoneStep = action.payload;
     },
-    setIsPhoneVerified: (state) => {
-      state.isPhoneVerified = true;
+    setIsPhoneVerified: (state, action) => {
+      state.isPhoneVerified = action.payload;
     },
-    // setPhoneVerificationStatus
+    setPhone: (state, action) => {
+      state.phone = action.payload;
+    },
+    // id
+    setIsIdVerified: (state, action) => {
+      state.isIdVerified = action.payload;
+      localStorage.setItem("isIdVerified", JSON.stringify(action.payload));
+    },
   },
 });
 
 export default verificationSlice.reducer;
 
-export const { setPhoneStep, setIsPhoneVerified } = verificationSlice.actions;
+export const {
+  // Phone
+  setPhoneStep,
+  setIsPhoneVerified,
+  setPhone,
+  // ID
+  setIsIdVerified,
+} = verificationSlice.actions;

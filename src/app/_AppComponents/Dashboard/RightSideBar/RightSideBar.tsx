@@ -1,9 +1,18 @@
 import { Badge } from '@/components/ui/badge'
+import { useAppSelector } from '@/lib/redux/hooks';
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import React from 'react'
 
 export default function RightSideBar() {
+
+    const { isIdVerified } = useAppSelector((state) => state.verificationReducer);
+    const [isMounted, setIsMounted] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsMounted(true);
+    }, []);
+
     return (
         <>
             <aside className="col-span-12 lg:col-span-3">
@@ -55,15 +64,22 @@ export default function RightSideBar() {
                                 className={cn(
                                     "cursor-pointer px-3 py-2 rounded-md bg-blue-950 text-white",
                                     "hover:bg-blue-900 transition-all duration-300",
-                                    // "disabled-link"
+                                    isIdVerified && "pointer-events-none cursor-not-allowed opacity-50"
                                 )}
                             >
                                 Verify ID
                             </Link>
 
-                            <Badge variant={"destructive"}>
-                                {"Not Verified"}
-                            </Badge>
+                            {isMounted && (
+                                <Badge
+                                    variant={isIdVerified ? "success" : "destructive"}
+                                // className={`bg-green-500`}
+                                >
+                                    {isIdVerified
+                                        ? "Verified"
+                                        : "Not Verified"}
+                                </Badge>
+                            )}
                         </div>
                     </div>
                 </div>
