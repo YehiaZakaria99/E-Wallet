@@ -14,8 +14,7 @@ const signinSlice = createSlice({
   initialState,
   reducers: {
     setUserToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload;
-      Cookies.set("userToken", state.token || "");
+      state.token = action.payload;  // accessToken
     },
     logout: (state) => {
       state.token = null;
