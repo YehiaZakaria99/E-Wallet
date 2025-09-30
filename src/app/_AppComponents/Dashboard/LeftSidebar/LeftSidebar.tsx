@@ -1,6 +1,7 @@
 import React from 'react';
 import Pill from './Pill';
 import { Account } from '@/interfaces/dashboard/dashboard.types';
+import { useAppSelector } from '@/lib/redux/hooks';
 
 
 
@@ -14,6 +15,9 @@ type LeftSidebarPropsType = {
 }
 
 function LeftSidebarComponent({ accounts, selectedAccountId, setCreateAccountOpen, setSelectedAccountId, formatCurrency }: LeftSidebarPropsType) {
+    
+    const {fullname} = useAppSelector((state)=> state.signUpReducer)
+
     return (
         <>
             <aside className="col-span-12 lg:col-span-3 py-2 md:py-0">
@@ -22,11 +26,11 @@ function LeftSidebarComponent({ accounts, selectedAccountId, setCreateAccountOpe
 
                         <div className="flex items-center justify-between">
                             <div>
-                                <div className="text-xs text-slate-400">Welcome back</div>
-                                <div className="font-semibold text-lg text-slate-900">User</div>
+                                <div className="text-xs text-slate-400">Welcome</div>
+                                <div className="font-semibold text-lg text-slate-900">{fullname}</div>
                             </div>
                             <div className="text-sm">
-                                <Pill>Verified</Pill>
+                                {/* <Pill>Verified</Pill> */}
                             </div>
                         </div>
 
