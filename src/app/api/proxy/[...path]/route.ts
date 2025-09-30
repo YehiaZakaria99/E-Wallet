@@ -27,7 +27,6 @@ async function handleRequest(req: NextRequest, method: string, path: string[]) {
     return new NextResponse(text, { status: res.status });
   }
 }
-// ✅ الطريقة الصحيحة للتوقيع
 export async function GET(req: NextRequest, context: { params: { path: string[] } }) {
   return handleRequest(req, "GET", context.params.path);
 }
