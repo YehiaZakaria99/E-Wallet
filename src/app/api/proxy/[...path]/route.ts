@@ -1,11 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const BACKEND_URL = "https://cvr4l6tc-3000.euw.devtunnels.ms";
-type RouteContext = {
-  params: {
-    path: string[];
-  };
-};
 
 async function handleRequest(req: NextRequest, method: string, path: string[]) {
   const targetPath = path.join("/");
@@ -33,18 +28,18 @@ async function handleRequest(req: NextRequest, method: string, path: string[]) {
   }
 }
 
-export async function GET(req: NextRequest, context: RouteContext) {
-  return handleRequest(req, "GET", context.params.path as string[]);
+export async function GET(req: NextRequest, context: any) {
+  return handleRequest(req, "GET", context.params.path);
 }
 
-export async function POST(req: NextRequest, context: RouteContext) {
-  return handleRequest(req, "POST", context.params.path as string[]);
+export async function POST(req: NextRequest, context: any) {
+  return handleRequest(req, "POST", context.params.path);
 }
 
-export async function PUT(req: NextRequest, context: RouteContext) {
-  return handleRequest(req, "PUT", context.params.path as string[]);
+export async function PUT(req: NextRequest, context: any) {
+  return handleRequest(req, "PUT", context.params.path);
 }
 
-export async function DELETE(req: NextRequest, context: RouteContext) {
-  return handleRequest(req, "DELETE", context.params.path as string[]);
+export async function DELETE(req: NextRequest, context: any) {
+  return handleRequest(req, "DELETE", context.params.path);
 }
