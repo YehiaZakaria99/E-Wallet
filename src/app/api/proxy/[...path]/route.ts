@@ -19,41 +19,27 @@ async function handleRequest(req: NextRequest, method: string, path: string[]) {
     body,
   });
 
-  // جرّب ترجّع JSON لو السيرفر رجّع JSON
   try {
     const data = await res.json();
     return NextResponse.json(data, { status: res.status });
   } catch {
-    // fallback لو الرد مش JSON
     const text = await res.text();
     return new NextResponse(text, { status: res.status });
   }
 }
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
-  return handleRequest(req, "GET", params.path);
+// ✅ الطريقة الصحيحة للتوقيع
+export async function GET(req: NextRequest, context: { params: { path: string[] } }) {
+  return handleRequest(req, "GET", context.params.path);
 }
 
-export async function POST(
-  req: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
-  return handleRequest(req, "POST", params.path);
+export async function POST(req: NextRequest, context: { params: { path: string[] } }) {
+  return handleRequest(req, "POST", context.params.path);
 }
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
-  return handleRequest(req, "PUT", params.path);
+export async function PUT(req: NextRequest, context: { params: { path: string[] } }) {
+  return handleRequest(req, "PUT", context.params.path);
 }
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
-  return handleRequest(req, "DELETE", params.path);
+export async function DELETE(req: NextRequest, context: { params: { path: string[] } }) {
+  return handleRequest(req, "DELETE", context.params.path);
 }
