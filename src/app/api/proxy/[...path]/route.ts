@@ -1,45 +1,51 @@
+// src/app/api/proxy/[...path]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 
-const BACKEND_URL = "https://cvr4l6tc-3000.euw.devtunnels.ms";
+const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
-async function handleRequest(req: NextRequest, method: string, path: string[]) {
-  const targetPath = path.join("/");
-  const url = `${BACKEND_URL}/${targetPath}${req.nextUrl.search}`;
+if (!API_BASE_URL) {
+  throw new Error("❌ Missing NEXT_PUBLIC_BASE_URL in environment variables");
+}
 
-  let body: string | undefined;
-  if (method !== "GET" && method !== "HEAD") {
-    body = await req.text();
-  }
+type RouteParams = {
+  params: { path: string[] };
+};
 
-  const res = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body,
+async function handleRequest(
+  req: NextRequest,
+  { params }: RouteParams
+): Promise<NextResponse> {
+  const targetPath = params.path.join("/");
+  const targetUrl = `${API_BASE_URL}/${targetPath}`;
+
+  const fetchOptions: RequestInit = {
+    method: req.method,
+    headers: new Headers(req.headers),
+    body:
+      req.method !== "GET" && req.method !== "HEAD"
+        ? await req.text()
+        : undefined,
+  };
+
+  const response = await fetch(targetUrl, fetchOptions);
+
+  const responseBody = await response.text();
+
+  return new NextResponse(responseBody, {
+    status: response.status,
+    headers: response.headers,
   });
-
-  try {
-    const data = await res.json();
-    return NextResponse.json(data, { status: res.status });
-  } catch {
-    const text = await res.text();
-    return new NextResponse(text, { status: res.status });
-  }
 }
 
-export async function GET(req: NextRequest, context: any) {
-  return handleRequest(req, "GET", context.params.path);
+export async function GET(req: NextRequest, ctx: RouteParams) {
+  return handleRequest(req, ctx);
 }
-
-export async function POST(req: NextRequest, context: any) {
-  return handleRequest(req, "POST", context.params.path);
+export async function POST(req: NextRequest, ctx: RouteParams) {
+  return handleRequest(req, ctx);
 }
-
-export async function PUT(req: NextRequest, context: any) {
-  return handleRequest(req, "PUT", context.params.path);
+export async function PUT(req: NextRequest, ctx: RouteParams) {
+  return handleRequest(req, ctx);
 }
-
-export async function DELETE(req: NextRequest, context: any) {
-  return handleRequest(req, "DELETE", context.params.path);
+export async function DELETE(req: NextRequest, ctx: RouteParams) {
+  return handleRequest(req, ctx);
 }
