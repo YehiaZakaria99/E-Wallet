@@ -12,7 +12,7 @@ import ShowError from '../ShowError'
 import { baseUrl } from '@/server/config'
 import { useMutation } from '@tanstack/react-query'
 
-type ResetPasswordResponse = { message: string }
+type ResetPasswordResponse = { message: string, status?: number }
 
 async function resetPassword(body: { token: string | null, newPassword: string }): Promise<ResetPasswordResponse> {
     const res = await fetch(`${baseUrl}/auth/reset-password`, {
@@ -22,9 +22,9 @@ async function resetPassword(body: { token: string | null, newPassword: string }
     });
     const finalResp = await res.json();
     if (!res.ok) {
-        console.log(finalResp);
         throw new Error(Array.isArray(finalResp.message) ? finalResp.message.join(", ") : finalResp.message || "Something went wrong");
     }
+
     return finalResp;
 }
 
@@ -47,9 +47,14 @@ export default function SetNewPassword({ setNewPasswordForm }: SetNewPasswordPro
     const resetPasswordMutation = useMutation({
         mutationFn: resetPassword,
         onSuccess: (data) => {
+            if (data.status === 400) {
+                showToast.error(`${data.message} Try to Resend Your Email` || "Try to Resend Your Email", { duration: 3000, position: "top-center" });
+                router.replace("/forget-password");
+                return;
+            }
             showToast.success(data.message || "Password Changed Successfully ✅", { duration: 3000, position: "top-center" });
-            reset();
             router.replace("/login");
+            reset();
         },
         onError: (error: unknown) => {
             const message = error instanceof Error ? error.message : "Verification failed";

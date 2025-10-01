@@ -1,25 +1,22 @@
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@radix-ui/react-label'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ShowError from '../ShowError'
 import { Button } from '@/components/ui/button'
 import { SubmitHandler, UseFormReturn } from 'react-hook-form'
 import { enterEmailType } from '@/interfaces/auth/resetPassword.types'
-import { baseUrl } from '@/server/config'
 import { useMutation } from '@tanstack/react-query'
 import { showToast } from 'nextjs-toast-notify'
-
+import { baseUrl } from '@/server/config'
 
 type EnterEmailPropsType = {
     enterEmailForm: UseFormReturn<enterEmailType>;
-
 }
 
 type succesFinalRespType = {
     message?: string;
 }
-
 
 async function sendEmail(body: { email: string }) {
     const res = await fetch(`${baseUrl}/auth/forget-password`, {
@@ -31,7 +28,6 @@ async function sendEmail(body: { email: string }) {
     });
 
     let finalResp;
-
     try {
         finalResp = await res.json();
     } catch {
@@ -52,6 +48,8 @@ async function sendEmail(body: { email: string }) {
 export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
     const { register, handleSubmit, formState: { errors }, reset } = enterEmailForm;
 
+    const [timer, setTimer] = useState<number>(0);
+
     const sendEmailMutation = useMutation({
         mutationFn: sendEmail,
         retry: false,
@@ -61,12 +59,23 @@ export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
                 position: "top-center",
             });
             reset();
+            setTimer(60);
         },
         onError: (error: unknown) => {
             const message = error instanceof Error ? error.message : "Verification failed";
             showToast.error(message, { duration: 5000, position: "top-center" });
         },
     });
+
+    useEffect(() => {
+        if (timer > 0) {
+            const interval = setInterval(() => {
+                setTimer((prev) => prev - 1);
+            }, 1000);
+
+            return () => clearInterval(interval);
+        }
+    }, [timer]);
 
     const onSubmit: SubmitHandler<enterEmailType> = ({ email }) => {
         sendEmailMutation.mutate({ email });
@@ -84,6 +93,18 @@ export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
                             type="email"
                             placeholder="m@example.com"
                         />
+                        {sendEmailMutation.isSuccess && (
+                            <div className='flex py-3 items-center gap-2'>
+                                <p className='text-sm'>
+                                    {sendEmailMutation.data?.message}
+                                </p>
+                                {timer > 0 && (
+                                    <span className="text-sm text-gray-600">
+                                        Resend again after {timer}s
+                                    </span>
+                                )}
+                            </div>
+                        )}
                         <ShowError error={errors.email} />
                     </div>
                 </div>
@@ -91,7 +112,7 @@ export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
             <CardFooter className="flex-col gap-2 pt-4">
                 <Button
                     type="submit"
-                    disabled={sendEmailMutation.isPending}
+                    disabled={sendEmailMutation.isPending || timer > 0}
                     className="w-full cursor-pointer bg-blue-950 transition-all duration-300 hover:bg-blue-900 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {sendEmailMutation.isPending ? "Sending..." : "Reset"}
@@ -100,4 +121,3 @@ export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
         </form>
     );
 }
-
