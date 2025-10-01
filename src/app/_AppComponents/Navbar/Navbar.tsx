@@ -24,6 +24,10 @@ const links: linksType[] = [
         href: "/transactions",
         name: "Transactions"
     },
+    {
+        href: "/settings",
+        name: "Settings"
+    },
 ]
 const auth: linksType[] = [
     {
@@ -65,7 +69,7 @@ export default function Navbar() {
                     {/* Desktop */}
                     <div className="hidden w-full md:flex justify-between md:w-auto mx-auto flex-2 " id="navbar-default">
                         {/* Desktop Links */}
-                        <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 md:flex-row  md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  dark:border-gray-700">
+                        <ul className="font-medium flex p-0 border-gray-100 space-x-8  mt-0 border-0 ">
                             {
                                 links.map((link) => (
                                     <NavbarDesktop pathname={pathname} key={link.href} link={link} />
@@ -73,7 +77,7 @@ export default function Navbar() {
                             }
                         </ul>
                         {/* Auth */}
-                        <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 md:flex-row  md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0  dark:border-gray-700">
+                        <ul className="font-medium flex p-0 border-gray-100 space-x-8 mt-0 border-0 ">
                             {loggedIn ? (
                                 <Logout />
                             ) : (
@@ -118,9 +122,11 @@ export default function Navbar() {
                     {/* Auth */}
                     <ul className="font-medium flex flex-col px-4 py-3 border-t border-gray-100 ">
                         {
-                            auth.map((link) => (
-                                <NavbarMobile key={`${link.href}-Mobile`} setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
-                            ))
+                            loggedIn ?
+                                <Logout setIsMenuOpen={setIsMenuOpen} /> :
+                                auth.map((link) => (
+                                    <NavbarMobile key={`${link.href}-Mobile`} setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
+                                ))
                         }
                     </ul>
 

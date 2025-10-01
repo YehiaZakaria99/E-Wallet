@@ -4,15 +4,23 @@ import { useAppDispatch } from '@/lib/redux/hooks'
 import { logout } from '@/lib/redux/slices/auth/signinSlice'
 import { cn } from '@/lib/utils'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { memo } from 'react'
 
-export default function Logout() {
+
+type LogoutPropsType = {
+    setIsMenuOpen?: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+function Logout({ setIsMenuOpen }: LogoutPropsType) {
     const dispatch = useAppDispatch();
     const router = useRouter();
 
     function handleLogout() {
         dispatch(logout());
         router.replace("/login");
+        if (setIsMenuOpen) {
+            setIsMenuOpen(false)
+        }
     }
 
     return (
@@ -30,3 +38,5 @@ export default function Logout() {
         </li>
     );
 }
+
+export default memo(Logout);
