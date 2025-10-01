@@ -111,7 +111,7 @@ export default function Navbar() {
                     <ul className="font-medium flex flex-col px-4 py-3">
                         {
                             links.map((link) => (
-                                <NavbarMobile setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
+                                <NavbarMobile key={`${link.href}-Mobile`} setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
                             ))
                         }
                     </ul>
@@ -119,7 +119,7 @@ export default function Navbar() {
                     <ul className="font-medium flex flex-col px-4 py-3 border-t border-gray-100 ">
                         {
                             auth.map((link) => (
-                                <NavbarMobile setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
+                                <NavbarMobile key={`${link.href}-Mobile`} setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
                             ))
                         }
                     </ul>
