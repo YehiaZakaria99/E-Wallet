@@ -2,7 +2,7 @@
 
 import { CardAction, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { Suspense, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
@@ -57,7 +57,9 @@ export default function ResetPasswordForm() {
             {/* Set New Password */}
 
             {
-                <SetNewPassword setNewPasswordForm={setNewPasswordForm} />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <SetNewPassword setNewPasswordForm={setNewPasswordForm} />
+                </Suspense>
             }
 
             <CardAction className="py-3 px-4">
