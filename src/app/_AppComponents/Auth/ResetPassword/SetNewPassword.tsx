@@ -19,9 +19,9 @@ type SetNewPasswordPropsType = {
 // Step Three
 export default function SetNewPassword({ setNewPasswordForm }: SetNewPasswordPropsType) {
 
-    const searchParams = useSearchParams();
-    const token = searchParams.get("token");
-    
+    // const searchParams = useSearchParams();
+    // const token = searchParams.get("token");
+
     const router = useRouter()
     const {
         register,
