@@ -69,7 +69,7 @@ export default function VerifyEmailForm() {
             });
             reset();
             setTimeout(() => {
-                router.push("/login");
+                router.replace("/login");
             }, 3000);
         },
         onError: (error: unknown) => {
