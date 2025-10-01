@@ -159,7 +159,7 @@ export default function SignInForm() {
                                     Password
                                 </Label>
                                 <Link
-                                    href="reset-password"
+                                    href="forget-password"
                                     className="ml-auto text-sm text-blue-950 underline-offset-4 transition-all duration-300 hover:underline"
                                 >
                                     Forgot your password?
