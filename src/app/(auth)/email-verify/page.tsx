@@ -1,4 +1,4 @@
-import VerifyEmailForm from '@/app/_AppComponents/Auth/VerifyEmailForm'
+import VerifyEmailForm from '@/app/_AppComponents/Auth/VerifyEmail/VerifyEmailForm'
 import { loggedUser } from '@/app/_AppComponents/Guard/loggedUser'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { redirect } from 'next/navigation'
