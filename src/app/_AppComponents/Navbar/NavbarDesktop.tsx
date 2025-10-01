@@ -3,16 +3,16 @@
 import { linksType } from '@/interfaces/links.type'
 import { cn } from '@/lib/utils';
 import Link from 'next/link'
-import { usePathname } from 'next/navigation';
-import React from 'react'
+import React, { memo } from 'react'
 
 
 type NavbarDesktopProps = {
-    link: linksType
+    link: linksType;
+    pathname: string;
 }
 
-export default function NavbarDesktop({ link }: NavbarDesktopProps) {
-    const pathname = usePathname();
+function NavbarDesktop({ link, pathname }: NavbarDesktopProps) {
+
     return (
         <>
             <li>
@@ -28,3 +28,6 @@ export default function NavbarDesktop({ link }: NavbarDesktopProps) {
         </>
     )
 }
+
+export default memo(NavbarDesktop)
+
