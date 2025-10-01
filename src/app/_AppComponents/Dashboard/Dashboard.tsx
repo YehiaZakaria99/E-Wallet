@@ -32,16 +32,16 @@ type Balance = {
 
 export default function Dashboard() {
     // Account state
-    const [accounts, setAccounts] = useState<Account[]>([]);
+    const [accounts] = useState<Account[]>([]);
     const [selectedAccountId, setSelectedAccountId] = useState<string | null>(null);
 
     // Data state
-    const [balance, setBalance] = useState<Balance | null>(null);
-    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [balance] = useState<Balance | null>(null);
+    const [transactions] = useState<Transaction[]>([]);
 
     // UI state
-    const [loading, setLoading] = useState(true);
-    const [txModal, setTxModal] = useState<Transaction | null>(null);
+    // const [loading, setLoading] = useState(true);
+    // const [txModal, setTxModal] = useState<Transaction | null>(null);
 
     // Derived totals
     const totals: totalType = {
@@ -88,7 +88,7 @@ export default function Dashboard() {
                         formatCurrency={formatCurrency}
                         transactions={transactions}
                         shortDate={shortDate}
-                        setTxModal={setTxModal}
+                        // setTxModal={setTxModal}
                     />
 
                     {/* Right */}

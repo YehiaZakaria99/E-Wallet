@@ -7,10 +7,10 @@ type MainContentPropsType = {
     totals: totalType;
     transactions: Transaction[];
     shortDate: (iso: string) => string;
-    setTxModal: React.Dispatch<React.SetStateAction<Transaction | null>>;
+    // setTxModal: React.Dispatch<React.SetStateAction<Transaction | null>>;
 }
 
-export default function MainContent({ formatCurrency, totals, transactions, shortDate, setTxModal }: MainContentPropsType) {
+export default function MainContent({ formatCurrency, totals, transactions, shortDate}: MainContentPropsType) {
     return (
         <>
             <main className="col-span-12 lg:col-span-6 py-2 md:py-0">
@@ -69,7 +69,7 @@ export default function MainContent({ formatCurrency, totals, transactions, shor
                                                     }`}>{t.status}</span>
                                             </td>
                                             <td className="py-3 text-sm">
-                                                <button onClick={() => setTxModal(t)} className="text-blue-600 underline">View</button>
+                                                {/* <button onClick={() => setTxModal(t)} className="text-blue-600 underline">View</button> */}
                                             </td>
                                         </tr>
                                     ))}

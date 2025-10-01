@@ -1,5 +1,4 @@
 import React from 'react';
-import Pill from './Pill';
 import { Account } from '@/interfaces/dashboard/dashboard.types';
 import { useAppSelector } from '@/lib/redux/hooks';
 
@@ -30,7 +29,6 @@ function LeftSidebarComponent({ accounts, selectedAccountId, setCreateAccountOpe
                                 <div className="font-semibold text-lg text-slate-900">{fullname}</div>
                             </div>
                             <div className="text-sm">
-                                {/* <Pill>Verified</Pill> */}
                             </div>
                         </div>
 

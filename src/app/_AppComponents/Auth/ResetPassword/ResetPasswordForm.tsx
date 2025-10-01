@@ -2,23 +2,15 @@
 
 import { CardAction, CardHeader, CardTitle } from '@/components/ui/card'
 import Link from 'next/link'
-import React, { Suspense, useState } from 'react'
+import React, { Suspense } from 'react'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
-import { enterEmailType, setNewPasswordType } from '@/interfaces/auth/resetPassword.types'
-import EnterEmail from './EnterEmail'
+import {  setNewPasswordType } from '@/interfaces/auth/resetPassword.types'
 import SetNewPassword from './SetNewPassword'
-import { useRouter, useSearchParams } from 'next/navigation'
 
 
 // Validation
-
-const enterEmailSchema = yup
-    .object({
-        email: yup.string().required("Email is required"),
-    })
-    .required()
 
 // Step Two
 const setNewPasswordSchema = yup
@@ -33,10 +25,6 @@ const setNewPasswordSchema = yup
 
 
 export default function ResetPasswordForm() {
-    const router = useRouter();
-
-
-    // const [step, setStep] = useState<number>(1);
 
     // React Hook Form To Handle Inputs
 

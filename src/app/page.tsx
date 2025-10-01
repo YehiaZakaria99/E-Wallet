@@ -1,4 +1,3 @@
-import { cookies } from "next/headers";
 import ChooseUsSection from "./_sections/ChooseUsSection";
 import HeroSection from "./_sections/HeroSection";
 import { redirect } from "next/navigation";

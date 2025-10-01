@@ -6,7 +6,6 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { codeInput } from '@/interfaces/auth/verifyEmailInput.types'
-// import { useAppDispatch } from '@/lib/redux/hooks'
 import { baseUrl } from '@/server/config'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { showToast } from 'nextjs-toast-notify'
@@ -24,7 +23,6 @@ const stepTwoSchema = yup
 
 
 export default function VerifyEmailForm() {
-    // const dispatch = useAppDispatch()
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
@@ -83,7 +81,7 @@ export default function VerifyEmailForm() {
         if (token) {
             verifyMutation.mutate({ token });
         }
-    }, [token]);
+    }, [token, verifyMutation]);
 
     const onSubmit: SubmitHandler<codeInput> = async (data) => {
         verifyMutation.mutate({ code: data.code });
