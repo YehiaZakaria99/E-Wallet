@@ -9,6 +9,7 @@ import { enterEmailType } from '@/interfaces/auth/resetPassword.types'
 import { useMutation } from '@tanstack/react-query'
 import { showToast } from 'nextjs-toast-notify'
 import { baseUrl } from '@/server/config'
+import Link from 'next/link'
 
 type EnterEmailPropsType = {
     enterEmailForm: UseFormReturn<enterEmailType>;
@@ -54,6 +55,12 @@ export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
         mutationFn: sendEmail,
         retry: false,
         onSuccess: (data) => {
+
+            if (!data) {
+                showToast.error("Email is Not Valid", { duration: 5000, position: "top-center" });
+                return
+            }
+
             showToast.success(data.message || "Email Verification Successfully ✅", {
                 duration: 3000,
                 position: "top-center",
@@ -62,7 +69,7 @@ export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
             setTimer(60);
         },
         onError: (error: unknown) => {
-            const message = error instanceof Error ? error.message : "Verification failed";
+            const message = error instanceof Error ? error.message : "Invalid Email";
             showToast.error(message, { duration: 5000, position: "top-center" });
         },
     });
@@ -103,6 +110,15 @@ export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
                                         Resend again after {timer}s
                                     </span>
                                 )}
+                            </div>
+                        )}
+                        {sendEmailMutation.isError && (
+                            <div className='flex py-3 items-center gap-2'>
+                                <p className='text-sm text-center text-red-500 font-semibold'>
+                                    Make Sure You Entered A valid Email Or
+                                    <Link className='inline-block text-blue-950 underline ' href={"/email-verify"}>Verify Your Email</Link>
+                                    {/* {sendEmailMutation.data?.message} */}
+                                </p>
                             </div>
                         )}
                         <ShowError error={errors.email} />

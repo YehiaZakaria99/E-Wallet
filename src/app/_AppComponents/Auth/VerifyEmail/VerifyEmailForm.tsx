@@ -133,7 +133,7 @@ export default function VerifyEmailForm() {
                         <Button
                             type="submit"
                             disabled={verifyMutation.isPending}
-                            className="w-full cursor-pointer bg-blue-950 transition-all duration-300 hover:bg-stone-700 disabled:opacity-50"
+                            className="w-full cursor-pointer bg-blue-950 transition-all duration-300 hover:bg-blue-900 disabled:opacity-50"
                         >
                             {verifyMutation.isPending ? "Verifying..." : "Send Code"}
                         </Button>
