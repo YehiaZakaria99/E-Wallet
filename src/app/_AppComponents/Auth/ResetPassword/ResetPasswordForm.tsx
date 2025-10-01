@@ -63,7 +63,7 @@ export default function ResetPasswordForm() {
             {/* Enter Email */}
 
             {
-                step === 1 && <EnterEmail enterEmailForm={enterEmailForm} />
+                step === 1 && <EnterEmail enterEmailForm={enterEmailForm} setStep={setStep} />
             }
 
             {/* Step Two */}
