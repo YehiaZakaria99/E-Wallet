@@ -1,5 +1,7 @@
 import { Badge } from '@/components/ui/badge'
-import { useAppSelector } from '@/lib/redux/hooks';
+import { useKycStatus } from '@/hooks/useKycStatus';
+import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks';
+import { setIsIdVerified } from '@/lib/redux/slices/verification/verificationSlice';
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import React from 'react'
@@ -13,29 +15,22 @@ export default function RightSideBar() {
         setIsMounted(true);
     }, []);
 
+    const dispatch = useAppDispatch();
+
+    const { data, isLoading } = useKycStatus();
+
+    React.useEffect(() => {
+        if (data?.message === "KYC approved") {
+            dispatch(setIsIdVerified(true));
+        } else {
+            dispatch(setIsIdVerified(false));
+        }
+    }, [data, dispatch]);
+
     return (
         <>
             <aside className="col-span-12 lg:col-span-3">
                 <div className="space-y-4 sticky top-6">
-                    {/* <div className="rounded-2xl bg-white shadow p-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="text-sm text-slate-600">Account Summary</div>
-                                    <div className="text-xs text-slate-500">{accounts.length} accounts</div>
-                                </div>
-
-                                <div className="mt-4 grid gap-3">
-                                    {accounts.slice(0, 3).map((a) => (
-                                        <div key={a.id} className="p-3 rounded-lg border">
-                                            <div className="flex items-center justify-between">
-                                                <div className="text-sm font-medium">{a.name}</div>
-                                                <div className="text-sm font-semibold">{formatCurrency(a.balance)}</div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className="mt-4 text-sm text-slate-500">View all accounts in the sidebar</div>
-                            </div> */}
 
                     <div className="rounded-2xl bg-white shadow p-4 overflow-auto">
                         {/* <div className="text-sm text-slate-600">Alerts & Verification</div> */}
@@ -73,11 +68,12 @@ export default function RightSideBar() {
                             {isMounted && (
                                 <Badge
                                     variant={isIdVerified ? "success" : "destructive"}
-                                // className={`bg-green-500`}
                                 >
-                                    {isIdVerified
-                                        ? "Verified"
-                                        : "Not Verified"}
+                                    {isLoading
+                                        ? "Checking..."
+                                        : isIdVerified
+                                            ? "Verified"
+                                            : "Not Verified"}
                                 </Badge>
                             )}
                         </div>

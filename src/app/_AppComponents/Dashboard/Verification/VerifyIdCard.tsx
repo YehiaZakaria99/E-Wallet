@@ -145,7 +145,6 @@ export default function VerifyIdCard() {
                 {isMounted && (
                     <Badge
                         variant={isIdVerified ? "success" : "destructive"}
-                        // className={`bg-green-500`}
                         >
                         {isLoading
                             ? "Checking..."
