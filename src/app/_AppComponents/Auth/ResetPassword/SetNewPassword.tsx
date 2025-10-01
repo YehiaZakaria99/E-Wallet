@@ -22,6 +22,7 @@ async function resetPassword(body: { token: string | null, newPassword: string }
     });
     const finalResp = await res.json();
     if (!res.ok) {
+        console.log(finalResp);
         throw new Error(Array.isArray(finalResp.message) ? finalResp.message.join(", ") : finalResp.message || "Something went wrong");
     }
     return finalResp;
