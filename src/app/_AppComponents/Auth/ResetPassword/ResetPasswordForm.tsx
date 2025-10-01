@@ -13,7 +13,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 
 // Validation
-// Step One
 
 const enterEmailSchema = yup
     .object({
@@ -34,17 +33,13 @@ const setNewPasswordSchema = yup
 
 
 export default function ResetPasswordForm() {
-        const router = useRouter();
+    const router = useRouter();
 
 
-    const [step, setStep] = useState<number>(1);
+    // const [step, setStep] = useState<number>(1);
 
     // React Hook Form To Handle Inputs
 
-    // Step One
-    const enterEmailForm = useForm<enterEmailType>(
-        { resolver: yupResolver(enterEmailSchema), }
-    )
 
     // Step Two
     const setNewPasswordForm = useForm<setNewPasswordType>(
@@ -58,19 +53,11 @@ export default function ResetPasswordForm() {
                     Reset Password
                 </CardTitle>
             </CardHeader>
-
-            {/* Step One */}
-            {/* Enter Email */}
-
-            {
-                step === 1 && <EnterEmail enterEmailForm={enterEmailForm} setStep={setStep} />
-            }
-
             {/* Step Two */}
             {/* Set New Password */}
 
             {
-                step === 2 && <SetNewPassword setNewPasswordForm={setNewPasswordForm} />
+                <SetNewPassword setNewPasswordForm={setNewPasswordForm} />
             }
 
             <CardAction className="py-3 px-4">

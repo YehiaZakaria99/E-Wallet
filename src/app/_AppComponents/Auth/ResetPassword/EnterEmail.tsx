@@ -13,7 +13,6 @@ import { showToast } from 'nextjs-toast-notify'
 
 type EnterEmailPropsType = {
     enterEmailForm: UseFormReturn<enterEmailType>;
-    setStep: React.Dispatch<React.SetStateAction<number>>
 
 }
 
@@ -50,7 +49,7 @@ async function sendEmail(body: { email: string }) {
     return finalResp as succesFinalRespType;
 }
 
-export default function EnterEmail({ enterEmailForm, setStep }: EnterEmailPropsType) {
+export default function EnterEmail({ enterEmailForm }: EnterEmailPropsType) {
     const { register, handleSubmit, formState: { errors }, reset } = enterEmailForm;
 
     const sendEmailMutation = useMutation({
@@ -61,7 +60,6 @@ export default function EnterEmail({ enterEmailForm, setStep }: EnterEmailPropsT
                 duration: 3000,
                 position: "top-center",
             });
-            setStep(2);
             reset();
         },
         onError: (error: unknown) => {
@@ -79,7 +77,7 @@ export default function EnterEmail({ enterEmailForm, setStep }: EnterEmailPropsT
             <CardContent>
                 <div className="flex flex-col gap-6">
                     <div className="grid gap-2">
-                        <Label className="text-blue-950" htmlFor="email">Email</Label>
+                        <Label className="text-blue-950" htmlFor="email">Enter Your Email</Label>
                         <Input
                             {...register("email")}
                             id="email"
