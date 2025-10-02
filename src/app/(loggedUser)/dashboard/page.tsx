@@ -9,6 +9,7 @@ export default async function DashboardPage() {
     if (!isLoggedUser) {
         redirect("/");
     }
+    
     return (
         <>
             <Dashboard />
