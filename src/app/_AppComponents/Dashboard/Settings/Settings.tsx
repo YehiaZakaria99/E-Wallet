@@ -165,7 +165,7 @@ export default function Settings() {
     }
 
     return (
-        <main className="p-6 max-w-5xl mx-auto md:pt-24 pt-32">
+        <main className="p-6 max-w-5xl mx-auto md:pt-12 pt-32">
             <div className="mb-10 border-b pb-4 text-center md:text-left">
                 <div className="text-blue-950 flex items-center justify-center md:justify-start gap-2">
                     <span className="text-xl"><SettingOutlined /></span>
@@ -176,9 +176,9 @@ export default function Settings() {
                 <p className="text-muted-foreground mt-1">Manage your account security and preferences</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1  gap-8">
                 {/* Security Card */}
-                <div className="md:col-span-2 md:h-80  order-2">
+                <div className="md:col-span-2 md:h-80 ">
                     <Card className="shadow-lg border rounded-2xl h-full flex flex-col justify-center space-y-10">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
@@ -234,7 +234,7 @@ export default function Settings() {
                 </div>
 
                 {/* Account Card */}
-                <div className="md:h-80  order-1">
+                {/* <div className="md:h-80  ">
                     <Card className="shadow-md h-full border rounded-2xl">
                         <CardHeader>
                             <CardTitle className="text-xl flex items-center gap-2 text-blue-950">
@@ -251,7 +251,7 @@ export default function Settings() {
                             </p>
                         </CardContent>
                     </Card>
-                </div>
+                </div> */}
             </div>
 
             {/* MFA Setup Dialog */}

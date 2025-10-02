@@ -8,6 +8,7 @@ import {
   SyncOutlined,
   SettingOutlined,
   LogoutOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ function SidebarComponent() {
 
   const navItems = [
     { name: "Dashboard", icon: <HomeOutlined />, href: "/dashboard" },
+    { name: "Profile", icon: <UserOutlined />, href: "/profile" },
     { name: "My Wallet", icon: <WalletOutlined />, href: "/dashboard/wallet" },
     { name: "Transactions", icon: <SyncOutlined />, href: "/dashboard/transactions" },
     { name: "Settings", icon: <SettingOutlined />, href: "/dashboard/settings" },
@@ -45,7 +47,7 @@ function SidebarComponent() {
               <Button
                 variant="ghost"
                 className={cn(
-                  "w-full justify-start gap-3 text-stone-950 hover:text-primary hover:bg-accent transition-colors",
+                  "w-full justify-start gap-3 text-stone-950 hover:text-primary hover:bg-accent transition-colors cursor-pointer",
                   pathname === item.href && `active-sidebar`
                 )}
               >
@@ -58,8 +60,9 @@ function SidebarComponent() {
         </nav>
 
         {/* Logout */}
-        <div className="px-4 mt-6">
+        {/* <div className="px-4 mt-6">
           <Logout />
+          </div> */}
           
           {/* <Button
             variant="ghost"
@@ -71,7 +74,6 @@ function SidebarComponent() {
           >
             
           </Button> */}
-        </div>
       </div>
     // </aside>
   );
