@@ -14,23 +14,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 
-// NOTE: This file is a single-file example for a Settings page that lets the user
-// enable/disable TOTP-based MFA (Google Authenticator, Authy, etc.).
-//
-// Assumptions & developer notes:
-// - Your project uses Next.js App Router and shadcn UI components.
-// - Adjust import paths if your components live in different locations.
-// - You must implement server endpoints (examples below in comments):
-//     POST /api/mfa/setup      -> generate temp secret & return otpauth_url + setupId
-//     POST /api/mfa/verify-setup -> verify the 6-digit code and persist the secret
-//     POST /api/mfa/disable    -> disable MFA for the user (auth required)
-// - On login, backend should return: { mfaRequired: true, mfaSessionId } when the user has MFA enabled.
-//
-// Client-side needs the `qrcode` package to render a QR image from the otpauth_url:
-//    npm i qrcode
-// and the component uses `toDataURL` from it.
 
 import { toDataURL } from "qrcode";
+import { CopyOutlined, KeyOutlined, SafetyOutlined, SettingOutlined, UserOutlined } from "@ant-design/icons";
+import { cn } from "@/lib/utils";
 
 export default function SettingsPage() {
     const [mfaEnabled, setMfaEnabled] = useState<boolean | null>(null); // null -> loading
@@ -39,8 +26,9 @@ export default function SettingsPage() {
     // setup state
     const [showSetupDialog, setShowSetupDialog] = useState(false);
     const [otpauthUrl, setOtpAuthUrl] = useState<string | null>(null);
-    const [secretBase32, setSecretBase32] = useState<string | null>(null);
-    const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+    const [secretBase32, setSecretBase32] = useState<string | null>("JRDE2RKUMEZSUNLIMV5SMSJDGIVDORC6NNKSSPREPE4G6XLTN43Q");
+    const [isCopied, setIsCopied] = useState(false);
+    const [qrDataUrl, setQrDataUrl] = useState<string | null>("data:image/png;base64,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");
     const [setupId, setSetupId] = useState<string | null>(null);
 
     // verification code input
@@ -83,24 +71,43 @@ export default function SettingsPage() {
         return () => { mounted = false };
     }, [otpauthUrl]);
 
+    // async function openSetup() {
+    //     setError(null);
+    //     setLoading(true);
+    //     try {
+    //         const res = await fetch("/api/mfa/setup", { method: "POST" });
+    //         if (!res.ok) throw new Error("Failed to create MFA setup");
+    //         const data = await res.json();
+    //         // expected: { otpauthUrl, base32, setupId }
+    //         setOtpAuthUrl(data.otpauthUrl || data.otpauth_url);
+    //         setSecretBase32(data.base32 || data.secret || null);
+    //         setSetupId(data.setupId || data.setup_id || null);
+    //         setShowSetupDialog(true);
+    //     } catch (e) {
+    //         console.error(e);
+    //         setError("Unable to start MFA setup. Try again later.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
     async function openSetup() {
-        setError(null);
-        setLoading(true);
-        try {
-            const res = await fetch("/api/mfa/setup", { method: "POST" });
-            if (!res.ok) throw new Error("Failed to create MFA setup");
-            const data = await res.json();
-            // expected: { otpauthUrl, base32, setupId }
-            setOtpAuthUrl(data.otpauthUrl || data.otpauth_url);
-            setSecretBase32(data.base32 || data.secret || null);
-            setSetupId(data.setupId || data.setup_id || null);
-            setShowSetupDialog(true);
-        } catch (e) {
-            console.error(e);
-            setError("Unable to start MFA setup. Try again later.");
-        } finally {
-            setLoading(false);
-        }
+        setShowSetupDialog(true);
+        // setError(null);
+        // setLoading(true);
+        // try {
+            // const res = await fetch("/api/mfa/setup", { method: "POST" });
+            // if (!res.ok) throw new Error("Failed to create MFA setup");
+            // const data = await res.json();
+            // // expected: { otpauthUrl, base32, setupId }
+            // setOtpAuthUrl(data.otpauthUrl || data.otpauth_url);
+            // setSecretBase32(data.base32 || data.secret || null);
+            // setSetupId(data.setupId || data.setup_id || null);
+        // } catch (e) {
+        //     console.error(e);
+        //     setError("Unable to start MFA setup. Try again later.");
+        // } finally {
+        //     setLoading(false);
+        // }
     }
 
     async function verifySetup(e?: React.FormEvent) {
@@ -151,20 +158,34 @@ export default function SettingsPage() {
         }
     }
 
+
+    function handleCopy() {
+        secretBase32 && navigator.clipboard.writeText(secretBase32);
+        setIsCopied(true);
+    }
+
     return (
-        <main className="p-6 max-w-5xl mx-auto py-24">
-            <div className="mb-10 border-b pb-4">
-                <h1 className="text-3xl font-bold">⚙️ Settings</h1>
+        <main className="p-6 max-w-5xl mx-auto md:pt-24 pt-32">
+            <div className="mb-10 border-b pb-4 text-center md:text-left">
+                <div className="text-blue-950 flex items-center justify-center md:justify-start gap-2">
+                    <span className="text-xl"><SettingOutlined /></span>
+                    <h1 className="text-3xl font-bold">
+                        Settings
+                    </h1>
+                </div>
                 <p className="text-muted-foreground mt-1">Manage your account security and preferences</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {/* Security Card */}
-                <div className="md:col-span-2 h-80">
+                <div className="md:col-span-2 md:h-80  order-2">
                     <Card className="shadow-lg border rounded-2xl h-full flex flex-col justify-center space-y-10">
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
-                                <span className="text-xl">🔒 Security</span>
+                                <span className="text-xl">
+                                    <SafetyOutlined />
+                                </span>
+                                <span className="text-xl">Security</span>
                             </CardTitle>
                             <CardDescription>
                                 Two-factor authentication (TOTP) for account protection.
@@ -213,11 +234,14 @@ export default function SettingsPage() {
                 </div>
 
                 {/* Account Card */}
-                <div className="h-80">
+                <div className="md:h-80  order-1">
                     <Card className="shadow-md h-full border rounded-2xl">
                         <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                👤 Account
+                            <CardTitle className="text-xl flex items-center gap-2 text-blue-950">
+                                <span className=""><UserOutlined /></span>
+                                <span className="font-bold ">
+                                    Account
+                                </span>
                             </CardTitle>
                             <CardDescription>Profile & recovery</CardDescription>
                         </CardHeader>
@@ -232,66 +256,86 @@ export default function SettingsPage() {
 
             {/* MFA Setup Dialog */}
             <Dialog open={showSetupDialog} onOpenChange={setShowSetupDialog}>
-                <DialogContent className="rounded-2xl">
+                <DialogContent className="dialog-button rounded-2xl md:h-auto md:my-8 w-full max-w-2xl h-[500px] overflow-auto my-12">
                     <DialogHeader>
-                        <DialogTitle className="text-xl">🔑 Set up Authenticator</DialogTitle>
+                        <DialogTitle className="text-xl font-semibold text-blue-950 flex items-center gap-2">
+                            <KeyOutlined /> Set up Authenticator
+                        </DialogTitle>
                         <p className="text-sm text-muted-foreground mt-1">
-                            Scan the QR with Google Authenticator / Authy or enter the secret manually.
+                            Protect your wallet with two-factor authentication.
                         </p>
                     </DialogHeader>
 
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="mt-6 grid grid-cols-1 gap-6">
                         {/* QR Section */}
-                        <div className="flex flex-col items-center gap-4">
+                        <Card className="p-4 flex flex-col md:flex-row items-center gap-6 shadow-md border">
                             {qrDataUrl ? (
                                 <img
                                     src={qrDataUrl}
                                     alt="MFA QR code"
-                                    className="w-48 h-48 bg-white p-2 rounded-lg shadow"
+                                    className="md:w-1/2 h-48 object-cover bg-white p-2 rounded-lg shadow"
                                 />
                             ) : (
-                                <div className="w-48 h-48 bg-muted/30 rounded-md flex items-center justify-center text-muted-foreground">
+                                <div className="md:w-1/2 h-48 bg-muted/30 rounded-md flex items-center justify-center text-muted-foreground">
                                     QR
                                 </div>
                             )}
 
                             {secretBase32 && (
-                                <div className="mt-3 w-full">
-                                    <Label>Secret key</Label>
-                                    <div className="flex gap-2 items-center mt-2">
-                                        <Input value={secretBase32} readOnly className="w-[220px]" />
+                                <div className="flex flex-col gap-3 md:w-1/2 md:w-">
+                                    <Label className="text-blue-950 font-medium">Secret key</Label>
+                                    <div className="flex gap-2 items-center">
+                                        <Input value={secretBase32} readOnly className="font-mono tracking-wider selection:bg-blue-950 " />
                                         <Button
+                                            className="cursor-pointer relative group "
                                             variant="outline"
                                             size="icon"
-                                            onClick={() => navigator.clipboard.writeText(secretBase32)}
+
+                                            onClick={() => handleCopy()}
                                         >
-                                            📋
+                                            <CopyOutlined />
+                                            <p className={cn(
+                                                "text-xs absolute text-white p-1 rounded-md -top-6 opacity-0 pointer-events-none",
+                                                "duration-300 group-hover:opacity-100 ",
+                                                !isCopied && "bg-blue-950",
+                                                isCopied && "bg-green-700",
+                                            )}
+                                            >
+                                                {!isCopied && "Copy to clipboard"}
+                                                {isCopied && "Copied"}
+                                            </p>
                                         </Button>
+
                                     </div>
+                                    <p className="text-xs text-muted-foreground">
+                                        If you can’t scan the QR, copy and paste this key into your authenticator app.
+                                    </p>
                                 </div>
                             )}
-                        </div>
+                        </Card>
 
                         {/* Verification Section */}
-                        <div>
-                            <form onSubmit={verifySetup} className="flex flex-col gap-4 bg-muted/10 p-4 rounded-lg">
+                        <Card className="p-4 shadow-md border">
+                            <form onSubmit={verifySetup} className="flex flex-col gap-4">
                                 <div>
-                                    <Label>Verification code</Label>
+                                    <Label className="text-blue-950 font-medium">Verification code</Label>
                                     <Input
+                                        className="mt-2 text-center tracking-[0.3em] font-bold text-lg"
                                         value={code}
                                         onChange={(e) => setCode(e.target.value)}
                                         maxLength={6}
-                                        placeholder="Enter 6-digit code"
+                                        placeholder="••••••"
                                     />
                                 </div>
 
                                 {error && <p className="text-sm text-destructive">{error}</p>}
 
-                                <div className="flex gap-2 mt-2">
-                                    <Button type="submit" disabled={verifying}>
+                                <div className="flex gap-2 mt-1">
+                                    <Button className="cursor-pointer bg-blue-950 hover:bg-blue-900" type="submit" disabled={verifying}>
                                         {verifying ? "Verifying..." : "Verify & Enable"}
                                     </Button>
                                     <Button
+                                        className="cursor-pointer"
                                         variant="ghost"
                                         onClick={() => {
                                             setShowSetupDialog(false);
@@ -307,7 +351,7 @@ export default function SettingsPage() {
                                     </Button>
                                 </div>
                             </form>
-                        </div>
+                        </Card>
                     </div>
                 </DialogContent>
             </Dialog>
