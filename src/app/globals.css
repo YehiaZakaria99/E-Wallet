@@ -130,6 +130,10 @@
   @apply text-white underline underline-offset-4;
 }
 
+.dialog-button{
+  @apply [&>button]:text-stone-700 [&>button]:cursor-pointer
+}
+
 html,
 body {
   scroll-behavior: smooth;
