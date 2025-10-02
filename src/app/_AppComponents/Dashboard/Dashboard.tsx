@@ -69,59 +69,22 @@ export default function Dashboard() {
     // }
 
     return (
-        <div className="min-h-screen bg-slate-50 py-24">
+        <div className="min-h-screen bg-slate-50 py-12">
             {/* <TopNav /> */}
-            <div className="container mx-auto px-4 py-6">
-                <div className="grid grid-cols-12 gap-6">
-                    {/* Sidebar */}
-                    <LeftSidebar
-                        accounts={accounts}
-                        selectedAccountId={selectedAccountId}
-                        setCreateAccountOpen={() => { }}
-                        setSelectedAccountId={setSelectedAccountId}
-                        formatCurrency={formatCurrency}
-                    />
-
+            <div className="container mx-auto px-4">
+                <div className="gap-6">
                     {/* Main */}
-                    <MainContent
-                        totals={totals}
-                        formatCurrency={formatCurrency}
-                        transactions={transactions}
-                        shortDate={shortDate}
+                    <main className=" p-6">
+                        <MainContent
+                            totals={totals}
+                            formatCurrency={formatCurrency}
+                            transactions={transactions}
+                            shortDate={shortDate}
                         // setTxModal={setTxModal}
-                    />
-
-                    {/* Right */}
-                    <RightSideBar />
+                        />
+                    </main>
                 </div>
             </div>
         </div>
     );
 }
-
-// ---------- Top navigation ----------
-// function TopNav() {
-//   return (
-//     <header className="bg-blue-950 text-white">
-//       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-//         <div className="flex items-center gap-6">
-//           <div className="text-xl font-semibold">E-Wallet</div>
-//           <nav className="hidden md:flex items-center gap-4 text-sm text-white/80">
-//             <a className="hover:underline">Home</a>
-//             <a className="hover:underline">Accounts</a>
-//             <a className="hover:underline">Transactions</a>
-//             <a className="hover:underline">Verification</a>
-//           </nav>
-//         </div>
-//         <div className="flex items-center gap-3">
-//           <input
-//             placeholder="Search transactions"
-//             className="hidden md:inline-block rounded-md px-3 py-2 text-sm text-slate-800"
-//           />
-//           <button className="px-3 py-2 rounded-md bg-white/10">Notifications</button>
-//           <div className="px-3 py-2 rounded-md bg-white/6">User</div>
-//         </div>
-//       </div>
-//     </header>
-//   );
-// }

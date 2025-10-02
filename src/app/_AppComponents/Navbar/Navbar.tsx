@@ -21,12 +21,12 @@ const links: linksType[] = [
     //     name: "Accounts"
     // },
     {
-        href: "/transactions",
-        name: "Transactions"
+        href: "/about",
+        name: "About Us"
     },
     {
-        href: "/settings",
-        name: "Settings"
+        href: "/contact",
+        name: "Contact Us"
     },
 ]
 const auth: linksType[] = [
@@ -78,11 +78,11 @@ export default function Navbar() {
                         </ul>
                         {/* Auth */}
                         <ul className="font-medium flex p-0 border-gray-100 space-x-8 mt-0 border-0 ">
-                            {loggedIn ? (
-                                <Logout />
-                            ) : (
-                                auth.map((link) => <NavbarDesktop pathname={pathname} key={link.href} link={link} />)
-                            )}
+                            {
+                                auth.map((link) =>
+                                    <NavbarDesktop pathname={pathname} key={link.href} link={link} />
+                                )}
+
                         </ul>
                     </div>
 
@@ -122,11 +122,9 @@ export default function Navbar() {
                     {/* Auth */}
                     <ul className="font-medium flex flex-col px-4 py-3 border-t border-gray-100 ">
                         {
-                            loggedIn ?
-                                <Logout setIsMenuOpen={setIsMenuOpen} /> :
-                                auth.map((link) => (
-                                    <NavbarMobile key={`${link.href}-Mobile`} setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
-                                ))
+                            auth.map((link) => (
+                                <NavbarMobile key={`${link.href}-Mobile`} setIsMenuOpen={setIsMenuOpen} pathname={pathname} link={link} />
+                            ))
                         }
                     </ul>
 

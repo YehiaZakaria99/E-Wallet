@@ -7,7 +7,6 @@ import Link from 'next/link'
 import React from 'react'
 
 export default function RightSideBar() {
-
     const { isIdVerified } = useAppSelector((state) => state.verificationReducer);
     const [isMounted, setIsMounted] = React.useState(false);
 
@@ -16,7 +15,6 @@ export default function RightSideBar() {
     }, []);
 
     const dispatch = useAppDispatch();
-
     const { data, isLoading } = useKycStatus();
 
     React.useEffect(() => {
@@ -28,58 +26,51 @@ export default function RightSideBar() {
     }, [data, dispatch]);
 
     return (
-        <>
-            <aside className="col-span-12 lg:col-span-3">
-                <div className="space-y-4 sticky top-6">
+        // <aside className="hidden lg:flex col-span-2 min-h-screen bg-white border-r shadow-sm">
+            <div className=" space-y-4 bg-slate-50 my-5">
+                <div className="rounded-2xl bg-white shadow-sm p-5 ">
+                    <h4 className="text-sm font-medium text-gray-800 mb-2">
+                        Verification
+                    </h4>
+                    <p className="text-sm text-gray-500 mb-4">
+                        Complete verification to lift withdrawal limits.
+                    </p>
 
-                    <div className="rounded-2xl bg-white shadow p-4 overflow-auto">
-                        {/* <div className="text-sm text-slate-600">Alerts & Verification</div> */}
-                        <div className="my-3 text-sm text-slate-500">
-                            Complete verification to lift withdrawal limits.
-                        </div>
-                        <div className="phone-verify py-3 flex justify-between items-center">
-                            <Link
-                                href={"./verification/verify-phone"}
-                                className={cn(
-                                    "cursor-pointer px-3 py-2 rounded-md bg-blue-950 text-white",
-                                    "hover:bg-blue-900 transition-all duration-300",
-                                    // "disabled-link"
-                                )}
-                            >
-                                Verify Phone
-                            </Link>
+                    {/* Phone Verify */}
+                    <div className="flex justify-between items-center py-6 border-b last:border-0">
+                        <Link
+                            href="/verification/verify-phone"
+                            className="cursor-pointer px-3 py-2 rounded-md bg-blue-950 text-white hover:bg-blue-900 transition"
+                        >
+                            Verify Phone
+                        </Link>
+                        <Badge variant="destructive">Not Verified</Badge>
+                    </div>
 
-                            <Badge variant={"destructive"}>
-                                {"Not Verified"}
-                            </Badge>
-                        </div>
-                        <div className="phone-verify py-3 flex justify-between items-center">
-                            <Link
-                                href={"./verification/verify-id"}
-                                className={cn(
-                                    "cursor-pointer px-3 py-2 rounded-md bg-blue-950 text-white",
-                                    "hover:bg-blue-900 transition-all duration-300",
-                                    isIdVerified && "pointer-events-none cursor-not-allowed opacity-50"
-                                )}
-                            >
-                                Verify ID
-                            </Link>
-
-                            {isMounted && (
-                                <Badge
-                                    variant={isIdVerified ? "success" : "destructive"}
-                                >
-                                    {isLoading
-                                        ? "Checking..."
-                                        : isIdVerified
-                                            ? "Verified"
-                                            : "Not Verified"}
-                                </Badge>
+                    {/* ID Verify */}
+                    <div className="flex justify-between items-center py-2">
+                        <Link
+                            href="/verification/verify-id"
+                            className={cn(
+                                "cursor-pointer px-3 py-2 rounded-md bg-blue-950 text-white hover:bg-blue-900 transition",
+                                isIdVerified && "pointer-events-none cursor-not-allowed opacity-50"
                             )}
-                        </div>
+                        >
+                            Verify ID
+                        </Link>
+
+                        {isMounted && (
+                            <Badge variant={isIdVerified ? "success" : "destructive"}>
+                                {isLoading
+                                    ? "Checking..."
+                                    : isIdVerified
+                                        ? "Verified"
+                                        : "Not Verified"}
+                            </Badge>
+                        )}
                     </div>
                 </div>
-            </aside>
-        </>
-    )
+            </div>
+        // </aside>
+    );
 }

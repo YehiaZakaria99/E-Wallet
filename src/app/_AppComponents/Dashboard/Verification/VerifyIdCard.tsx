@@ -19,7 +19,7 @@ import { useKycStatus } from "@/hooks/useKycStatus";
 import { setIsIdVerified } from "@/lib/redux/slices/verification/verificationSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import Cookies from "js-cookie";
-import { baseUrl } from "@/server/config";
+import { baseUrl, localBase } from "@/server/config";
 import { setUserToken } from "@/lib/redux/slices/auth/signinSlice";
 
 
@@ -99,7 +99,7 @@ export default function VerifyIdCard() {
                 formData.append("documentType", data.documentType);
                 formData.append("file", data.file[0]);
 
-                const res = await fetch(`${baseUrl}/auth/kyc/submit`, {
+                const res = await fetch(`${localBase}/auth/kyc/submit`, {
                     method: "POST",
                     body: formData,
                     headers: {

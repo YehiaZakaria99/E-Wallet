@@ -25,7 +25,7 @@ export default function StoreProvider({ children }: StoreProviderPropsType) {
         <>
             <Provider store={storeRef.current}>
                 <QueryClientProvider client={queryClient}>
-                    <Navbar />
+                    {/* <Navbar /> */}
                     {children}
                 </QueryClientProvider>
             </Provider>
