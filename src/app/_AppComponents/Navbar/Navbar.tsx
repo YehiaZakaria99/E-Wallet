@@ -16,10 +16,10 @@ const links: linksType[] = [
         href: "/",
         name: "Home"
     },
-    {
-        href: "/accounts",
-        name: "Accounts"
-    },
+    // {
+    //     href: "/accounts",
+    //     name: "Accounts"
+    // },
     {
         href: "/transactions",
         name: "Transactions"
