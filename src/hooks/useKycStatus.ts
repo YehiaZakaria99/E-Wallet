@@ -1,4 +1,4 @@
-import { baseUrl } from "@/server/config";
+import { baseUrl, localBase } from "@/server/config";
 import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 

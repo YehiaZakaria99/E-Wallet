@@ -99,7 +99,7 @@ export default function VerifyIdCard() {
                 formData.append("documentType", data.documentType);
                 formData.append("file", data.file[0]);
 
-                const res = await fetch(`${localBase}/auth/kyc/submit`, {
+                const res = await fetch(`${baseUrl}/auth/kyc/submit`, {
                     method: "POST",
                     body: formData,
                     headers: {
