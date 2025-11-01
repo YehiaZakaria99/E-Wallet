@@ -6,9 +6,9 @@ export default function ForgetPassword() {
   return (
     <>
       <section className="py-48 px-5">
-        <Card className="w-full max-w-sm mx-auto shadow-lg shadow-stone-700 pb-1 ">
+        {/* <Card className="w-full max-w-sm mx-auto shadow-lg shadow-stone-700 pb-1 ">
           <ForgotPasswordForm />
-        </Card>
+        </Card> */}
       </section>
     </>
   )
