@@ -2,9 +2,10 @@ import ShowError from '@/app/_AppComponents/Auth/ShowError'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { useVerifyPhone } from '@/hooks/useVerifyPhone'
 import { otpInputType } from '@/interfaces/verification/verifications.types'
 import { useAppDispatch, useAppSelector } from '@/lib/redux/hooks'
-import { setIsPhoneVerified} from '@/lib/redux/slices/verification/verificationSlice'
+import { setIsPhoneVerified } from '@/lib/redux/slices/verification/verificationSlice'
 import { baseUrl } from '@/server/config'
 import { Label } from '@radix-ui/react-label'
 import { useMutation } from '@tanstack/react-query'
@@ -21,34 +22,6 @@ export default function PhoneStepTwo({ otpForm }: PhoneStepTwoPropsType) {
     const dispatch = useAppDispatch();
     const { phone } = useAppSelector((state) => state.verificationReducer)
 
-    async function sendOtp(otpCode: otpInputType) {
-        const body = {
-            phone,
-            ...otpCode
-        };
-
-        const res = await fetch(`${baseUrl}/auth/verify-phone`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body),
-        });
-
-        let finalResp;
-        try {
-            finalResp = await res.json();
-        } catch {
-            throw new Error("Verification failed");
-        }
-
-        if (!res.ok) {
-            throw new Error(
-                Array.isArray(finalResp.message)
-                    ? finalResp.message.join(", ")
-                    : finalResp.message || "Something went wrong"
-            );
-        }
-        return finalResp;
-    }
 
     const {
         register,
@@ -57,22 +30,7 @@ export default function PhoneStepTwo({ otpForm }: PhoneStepTwoPropsType) {
         formState: { errors }
     } = otpForm;
 
-    const otpMutation = useMutation({
-        mutationFn: sendOtp,
-        onSuccess: (data) => {
-            showToast.success(data.message || "Phone Verified Successfully ✅", {
-                duration: 3000,
-                position: "top-center",
-            });
-            dispatch(setIsPhoneVerified(true));
-            reset();
-            redirect("/dashboard");
-        },
-        onError: (error: unknown) => {
-            const message = error instanceof Error ? error.message : "Verification failed";
-            showToast.error(message, { duration: 5000, position: "top-center" });
-        },
-    })
+    const { otpMutation } = useVerifyPhone();
 
     const onSubmit: SubmitHandler<otpInputType> =
         async (data) => {

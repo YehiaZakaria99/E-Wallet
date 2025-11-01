@@ -40,7 +40,7 @@ export default function RightSideBar() {
                 {/* Phone Verify */}
                 <div className="flex justify-between items-center py-3 border-b border-gray-200">
                     <Link
-                        href="/verification/verify-phone"
+                        href="/dashboard/verify-phone"
                         className="cursor-pointer px-3 py-2 rounded-md bg-blue-950 text-white hover:bg-blue-900 transition"
                     >
                         Verify Phone
@@ -51,7 +51,7 @@ export default function RightSideBar() {
                 {/* ID Verify */}
                 <div className="flex justify-between items-center py-3">
                     <Link
-                        href="/verification/verify-id"
+                        href="/dashboard/verify-id"
                         className={cn(
                             "cursor-pointer px-3 py-2 rounded-md bg-blue-950 text-white hover:bg-blue-900 transition",
                             isIdVerified && "pointer-events-none cursor-not-allowed opacity-50"

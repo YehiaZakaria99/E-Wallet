@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 
 export default async function SettingsPage() {
 
-    // const isLoggedUser = await loggedUser();
-    // if (!isLoggedUser) {
-    //     redirect("/");
-    // }
+    const isLoggedUser = await loggedUser();
+    if (!isLoggedUser) {
+        redirect("/");
+    }
 
     return (
         <Settings />

@@ -18,24 +18,11 @@ import { useMutation } from "@tanstack/react-query";
 import { useKycStatus } from "@/hooks/useKycStatus";
 import { setIsIdVerified } from "@/lib/redux/slices/verification/verificationSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import Cookies from "js-cookie";
 import { baseUrl, localBase } from "@/server/config";
 import { setUserToken } from "@/lib/redux/slices/auth/signinSlice";
+import { idInputsType } from "@/interfaces/verification/verifications.types";
+import { useVerifyId } from "@/hooks/useVerifyId";
 
-
-
-
-type successFinalRespType = {
-    accessToken: string;
-    refreshToken: string;
-    message: string;
-}
-
-// {
-//     "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NWNhZDNjMi0yMTM4LTQ1ZTQtOTFjYy01MTZmMjFmZjExY2MiLCJlbWFpbCI6InllaGlhemFrYXJpYTE2MTk5QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwia3ljU3RhdHVzIjoiYXBwcm92ZWQiLCJpYXQiOjE3NTkyNDIzNTAsImV4cCI6MTc1OTI0OTU1MH0.9Q8u0g1rg6zHNUQEyeGFWGbpbArdNmFjjFMQ3EmRONQ",
-//     "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1NWNhZDNjMi0yMTM4LTQ1ZTQtOTFjYy01MTZmMjFmZjExY2MiLCJlbWFpbCI6InllaGlhemFrYXJpYTE2MTk5QGdtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwia3ljU3RhdHVzIjoiYXBwcm92ZWQiLCJpYXQiOjE3NTkyNDIzNTAsImV4cCI6MTc1OTg0NzE1MH0.oEC0S7RmWKaU77yI3B6dJ_bGOi0Qvswysh93UUmXULk",
-//     "message": "KYC approved"
-// }
 
 
 
@@ -53,24 +40,18 @@ const schema = yup.object({
         }),
 });
 
-type FormInputs = {
-    documentType: string;
-    file: FileList;
-};
+
 
 export default function VerifyIdCard() {
     const [isMounted, setIsMounted] = React.useState(false);
+    const idMutation = useVerifyId();
+    const { data, isLoading } = useKycStatus();
+    const dispatch = useAppDispatch();
+    const { isIdVerified } = useAppSelector((state) => state.verificationReducer);
 
     React.useEffect(() => {
         setIsMounted(true);
     }, []);
-
-
-
-    const dispatch = useAppDispatch();
-    const { isIdVerified } = useAppSelector((state) => state.verificationReducer);
-
-    const { data, isLoading } = useKycStatus();
 
     React.useEffect(() => {
         if (data?.message === "KYC approved") {
@@ -86,56 +67,13 @@ export default function VerifyIdCard() {
         handleSubmit,
         formState: { errors },
         reset,
-    } = useForm<FormInputs>({
+    } = useForm<idInputsType>({
         resolver: yupResolver(schema),
     });
 
-    // ================= Mutation Setup =================
-    const mutation = useMutation({
-        mutationFn:
-            async (data: FormInputs) => {
-                const token = Cookies.get("userToken");
-                const formData = new FormData();
-                formData.append("documentType", data.documentType);
-                formData.append("file", data.file[0]);
-
-                const res = await fetch(`${baseUrl}/auth/kyc/submit`, {
-                    method: "POST",
-                    body: formData,
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                let finalResp;
-                try {
-                    finalResp = await res.json();
-                } catch {
-                    throw new Error("Verification failed");
-                }
-
-                if (!res.ok) {
-                    throw new Error(
-                        Array.isArray(finalResp.message)
-                            ? finalResp.message.join(", ")
-                            : finalResp.message || "Something went wrong"
-                    );
-                }
-
-                return finalResp as successFinalRespType;
-            },
-        onSuccess: (data) => {
-            const { refreshToken, accessToken } = data;
-            dispatch(setUserToken(accessToken));
-            Cookies.set("userToken", refreshToken);
-            dispatch(setIsIdVerified(true));
-            reset();
-        },
-    });
-
     // ================= Submit Handler =================
-    const onSubmit = (data: FormInputs) => {
-        mutation.mutate(data);
+    const onSubmit = (data: idInputsType) => {
+        idMutation.mutate(data);
     };
 
     return (
@@ -145,7 +83,7 @@ export default function VerifyIdCard() {
                 {isMounted && (
                     <Badge
                         variant={isIdVerified ? "success" : "destructive"}
-                        >
+                    >
                         {isLoading
                             ? "Checking..."
                             : isIdVerified
@@ -184,9 +122,9 @@ export default function VerifyIdCard() {
                     </div>
 
                     {/* Error Message from Mutation */}
-                    {mutation.error && (
+                    {idMutation.error && (
                         <p className="text-red-500 text-sm">
-                            {(mutation.error as Error).message}
+                            {(idMutation.error as Error).message}
                         </p>
                     )}
                 </CardContent>
@@ -194,10 +132,10 @@ export default function VerifyIdCard() {
                 <CardFooter className="flex justify-end py-3 mt-3">
                     <Button
                         type="submit"
-                        disabled={isIdVerified || mutation.isPending}
+                        disabled={isIdVerified || idMutation.isPending}
                         className="cursor-pointer bg-blue-950 hover:bg-blue-900"
                     >
-                        {mutation.isPending
+                        {idMutation.isPending
                             ? "Verifying..."
                             : isIdVerified
                                 ? "Verified"
@@ -208,3 +146,4 @@ export default function VerifyIdCard() {
         </Card>
     );
 }
+

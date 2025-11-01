@@ -1,15 +1,14 @@
 "use client"
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import NavbarDesktop from './NavbarDesktop'
 import { linksType } from '@/interfaces/links.type'
-import { useAppSelector } from '@/lib/redux/hooks'
-import Logout from '../Auth/Logout'
-import Cookies from "js-cookie";
 import { CloseOutlined, MenuOutlined } from '@ant-design/icons'
 import NavbarMobile from './NavbarMobile'
 import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
+import Cookies from "js-cookie";
+
 
 const links: linksType[] = [
     {
@@ -40,22 +39,25 @@ const auth: linksType[] = [
     },
 ]
 
-
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
     const pathname = usePathname();
+    const token  = Cookies.get("userToken");
+    const [isLogged, setIsLogged] = useState(false);
 
-    const { token } = useAppSelector((state) => state.signInReducer);
 
-    const [isClient, setIsClient] = React.useState(false);
+    useEffect(() => {
+        if (token) {
+            setIsLogged(true);
+        } else {
+            setIsLogged(false);
+        }
+    }, [token])
 
-    React.useEffect(() => {
-        setIsClient(true);
-    }, []);
 
-    const loggedIn = isClient && (token || Cookies.get("userToken"));
-
+    if (isLogged) {
+        return;
+    }
 
     return (
         <>
@@ -127,7 +129,6 @@ export default function Navbar() {
                             ))
                         }
                     </ul>
-
                 </div>
             </nav>
         </>

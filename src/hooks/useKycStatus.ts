@@ -12,7 +12,7 @@ export function useKycStatus() {
   return useQuery({
     queryKey: ["kycStatus"],
     queryFn: async () => {
-      const res = await fetch(`${baseUrl}/auth/kyc/status`, {
+      const res = await fetch(`${localBase}/auth/kyc/status`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

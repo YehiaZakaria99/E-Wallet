@@ -1,21 +1,16 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { signUpInputs } from "@/interfaces/auth/signupInputs.types";
-import { useAppDispatch } from "@/lib/redux/hooks";
-import { resetSignUp, setUserInfo } from "@/lib/redux/slices/auth/signupSlice";
 import { CardContent, CardFooter } from "@/components/ui/card";
-import { showToast } from "nextjs-toast-notify";
-import { baseUrl } from "@/server/config";
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import ShowError from "../ShowError";
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-import { useMutation } from "@tanstack/react-query";
+import { useRegister } from "@/hooks/useRegister";
 
 const signupSchema = yup.object({
     email: yup.string().email("Invalid email").required("Email is required"),
@@ -30,61 +25,9 @@ const signupSchema = yup.object({
     phone: yup.string().required("Phone is required"),
 });
 
-async function registerData(userData: signUpInputs) {
-    const res = await fetch(`${baseUrl}/auth/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(userData),
-    });
-    let finalResp;
 
-    try {
-        finalResp = await res.json();
-    } catch {
-        throw new Error("Register failed");
-    }
-
-    if (!res.ok) {
-        throw new Error(
-            Array.isArray(finalResp.message)
-                ? finalResp.message.join(", ")
-                : finalResp.message || "Something went wrong"
-        );
-    }
-    return finalResp;
-}
-
-async function verifyEmail(email: { email: string }) {
-    const res = await fetch(`${baseUrl}/auth/email-verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(email),
-    });
-    let finalResp;
-
-    try {
-        finalResp = await res.json();
-    } catch {
-        throw new Error("Verification failed");
-    }
-
-    if (!res.ok) {
-        throw new Error(
-            Array.isArray(finalResp.message)
-                ? finalResp.message.join(", ")
-                : finalResp.message || "Something went wrong"
-        );
-    }
-    return finalResp;
-}
 
 export default function SignUpForm() {
-    const dispatch = useAppDispatch();
-    const router = useRouter();
-
-    useEffect(() => {
-        dispatch(resetSignUp());
-    }, [dispatch]);
 
     const {
         register,
@@ -96,40 +39,11 @@ export default function SignUpForm() {
     });
 
     // Mutation for register
-    const registerMutation = useMutation({
-        mutationFn: registerData,
-        onSuccess: async (data, variables) => {
-            showToast.success(data.message, { duration: 5000, position: "top-center" });
-            // Verify Email
-            try {
-                const verifyRes = await verifyEmail({ email: variables.email });
-                showToast.success(verifyRes.message, {
-                    duration: 5000,
-                    position: "top-center",
-                });
-
-                dispatch(setUserInfo(variables));
-                reset();
-                router.push("/email-verify");
-            } catch (error: unknown) {
-                const message = error instanceof Error ? error.message : "Failed to sign up";
-                showToast.error(message || "Failed to send verification email", {
-                    duration: 5000,
-                    position: "top-center",
-                });
-            }
-        },
-        onError: (error: unknown) => {
-            const message = error instanceof Error ? error.message : "Failed to sign up";
-            showToast.error(message || "Failed to sign up", {
-                duration: 5000,
-                position: "top-center",
-            });
-        },
-    });
+    const { registerMutation } = useRegister();
 
     const onSubmit: SubmitHandler<signUpInputs> = (data) => {
         registerMutation.mutate(data);
+        reset()
     };
 
     return (

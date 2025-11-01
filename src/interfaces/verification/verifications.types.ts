@@ -7,3 +7,8 @@ export type otpInputType = {
 };
 
 
+
+export type idInputsType = {
+    documentType: string;
+    file: FileList;
+};

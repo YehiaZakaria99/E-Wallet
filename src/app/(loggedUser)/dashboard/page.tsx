@@ -5,10 +5,10 @@ import { redirect } from 'next/navigation';
 import Dashboard from '@/app/_AppComponents/Dashboard/Dashboard';
 
 export default async function DashboardPage() {
-    // const isLoggedUser = await loggedUser();
-    // if (!isLoggedUser) {
-    //     redirect("/");
-    // }
+    const isLoggedUser = await loggedUser();
+    if (!isLoggedUser) {
+        redirect("/");
+    }
 
     return (
         <>

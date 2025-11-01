@@ -2,6 +2,7 @@ import ShowError from '@/app/_AppComponents/Auth/ShowError'
 import { Button } from '@/components/ui/button'
 import { CardContent, CardFooter } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
+import { useVerifyPhone } from '@/hooks/useVerifyPhone'
 import { phoneInputType } from '@/interfaces/verification/verifications.types'
 import { useAppDispatch } from '@/lib/redux/hooks'
 import { setPhone, setPhoneStep } from '@/lib/redux/slices/verification/verificationSlice'
@@ -17,29 +18,7 @@ type PhoneStepOnePropsType = {
 }
 
 // API
-async function verifyPhone(body: phoneInputType) {
-    const res = await fetch(`${baseUrl}/auth/phone-verify`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-    });
 
-    let finalResp;
-    try {
-        finalResp = await res.json();
-    } catch {
-        throw new Error("Verification failed");
-    }
-
-    if (!res.ok) {
-        throw new Error(
-            Array.isArray(finalResp.message)
-                ? finalResp.message.join(", ")
-                : finalResp.message || "Something went wrong"
-        );
-    }
-    return finalResp;
-}
 
 export default function PhoneStepOne({ phoneForm }: PhoneStepOnePropsType) {
     const dispatch = useAppDispatch();
@@ -51,22 +30,7 @@ export default function PhoneStepOne({ phoneForm }: PhoneStepOnePropsType) {
         formState: { errors }
     } = phoneForm;
 
-    const phoneMutation = useMutation({
-        mutationFn: verifyPhone,
-        onSuccess: (data, variables) => {
-            showToast.success(data.message || "Phone Verification Successfully ✅", {
-                duration: 3000,
-                position: "top-center",
-            });
-            dispatch(setPhone(variables.phone));
-            dispatch(setPhoneStep(2));
-            reset();
-        },
-        onError: (error: unknown) => {
-            const message = error instanceof Error ? error.message : "Verification failed";
-            showToast.error(message, { duration: 5000, position: "top-center" });
-        },
-    })
+    const {phoneMutation} = useVerifyPhone();
 
     const onSubmit: SubmitHandler<phoneInputType> =
         async (data) => {
